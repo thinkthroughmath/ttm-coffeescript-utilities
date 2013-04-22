@@ -1,0 +1,25 @@
+
+div.equation-builder
+{
+    background-color: green;
+    width: 100%;
+    height: 200px;
+
+    div.number-panel
+    {
+        float: left;
+        width: 66px;
+    }
+
+    div.control-panel
+    {
+        float: left;
+        width: 100px;
+    }
+
+    div.variables-panel
+    {
+        float: left;
+        width: 100px;
+    }
+}
