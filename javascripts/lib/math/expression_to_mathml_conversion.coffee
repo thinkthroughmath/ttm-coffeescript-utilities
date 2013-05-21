@@ -18,17 +18,42 @@ ttm.define 'lib/math/expression_to_mathml_conversion',
 
     refinement.forType(math.expression,
       {
-        convertToMathML: ->
+        toMathML: ->
           mathml = ""
           for exp, i in @expression
             mathml += refinement.refine(exp).toMathML(@, i)
           "<mrow>#{mathml}</mrow>"
       });
 
+
+    refinement.forType(math.components.addition,
+      {
+        toMathML: ->
+          "<mo>+</mo>"
+      });
+
+    refinement.forType(math.components.multiplication,
+      {
+        toMathML: ->
+          "<mo>&times;</mo>"
+      });
+
+    refinement.forType(math.components.division,
+      {
+        toMathML: ->
+          "<mo>&divide;</mo>"
+      });
+
+    refinement.forType(math.components.subtraction,
+      {
+        toMathML: ->
+          "<mo>-</mo>"
+      });
+
     class ExpressionToMathMLConversion
       initialize: ()->
       convert: (expression)->
-        refinement.refine(expression).convertToMathML();
+        refinement.refine(expression).toMathML();
 
     class_mixer ExpressionToMathMLConversion
 
