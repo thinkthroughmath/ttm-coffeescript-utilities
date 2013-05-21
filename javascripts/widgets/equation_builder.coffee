@@ -103,7 +103,7 @@ ttm.define 'equation_builder',
       exponentClick: ->
       square_rootClick: ->
       squareClick: ->
-        @logic.command @commands.exponentiate_last.build(power: 2)
+        @logic.command @commands.exponentiate_last.build(power: 2, power_closed: true)
       decimalClick: ->
         @logic.command @commands.append_decimal.build()
       clearClick: ->
