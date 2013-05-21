@@ -65,7 +65,6 @@ ttm.define 'equation_builder',
       updateDisplay: ->
         mathml = @mathML()
         @logger.info "updateDisplay updating to", mathml
-        debugger
         @display.update(mathml)
 
       mathML: ->
