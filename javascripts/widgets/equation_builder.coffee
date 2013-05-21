@@ -1,5 +1,6 @@
 #= require almond
 #= require lib
+#= require lib/logger
 #= require widgets/ui_elements
 #= require widgets/mathml
 #= require lib/math
@@ -8,8 +9,8 @@
 
 ttm.define 'equation_builder',
   ["lib/class_mixer", "lib/math/buttons", 'widgets/ui_elements', 'lib/math', 'lib/historic_value',
-   'lib/math/expression_to_mathml_conversion'],
-  (class_mixer, math_buttons, ui_elements, math, historic_value, mathml_converter_builder)->
+   'lib/math/expression_to_mathml_conversion', 'logger'],
+  (class_mixer, math_buttons, ui_elements, math, historic_value, mathml_converter_builder, logger_builder)->
     class EquationBuilder
       initialize: (@opts)->
         math_button_builder = math_buttons.makeBuilder()
@@ -18,6 +19,7 @@ ttm.define 'equation_builder',
         @buttons = _EquationBuilderButtonsLogic.build(
           math_button_builder,
           math.commands)
+        @logger = @opts.logger || logger_builder.build()
 
         display = ui_elements.mathml_display_builder.build(mathml_renderer: @opts.mathml_renderer)
 
@@ -35,7 +37,7 @@ ttm.define 'equation_builder',
           math.equation,
           @equation_value,
           display,
-          @mathml_converter)
+          @mathml_converter, @logger)
 
         @buttons.setLogic @logic
 
@@ -49,7 +51,7 @@ ttm.define 'equation_builder',
     class_mixer(EquationBuilder)
 
     class _EquationBuilderLogic
-      initialize: (@equation_builder, @equation, @display, @mathml_conversion_builder)->
+      initialize: (@equation_builder, @equation, @display, @mathml_conversion_builder, @logger)->
         @reset()
         @updateDisplay()
 
@@ -61,8 +63,13 @@ ttm.define 'equation_builder',
         @equation.update(@equation_builder.build())
 
       updateDisplay: ->
-        mathml = @mathml_conversion_builder.convert(@equation.current().expression)
+        mathml = @mathML()
+        @logger.info "updateDisplay updating to", mathml
+        debugger
         @display.update(mathml)
+
+      mathML: ->
+        @mathml_conversion_builder.convert(@equation.current().expression)
 
     class_mixer(_EquationBuilderLogic)
 
@@ -97,21 +104,22 @@ ttm.define 'equation_builder',
       exponentClick: ->
       square_rootClick: ->
       squareClick: ->
+        @logic.command @commands.exponentiate_last.build(power: 2)
       decimalClick: ->
-        @logic.command @commands.decimal.build()
+        @logic.command @commands.append_decimal.build()
       clearClick: ->
         @logic.reset()
       equalsClick: ->
       subtractionClick: ->
-        @logic.command @commands.subtraction.build()
+        @logic.command @commands.append_subtraction.build()
       divisionClick: ->
-        @logic.command @commands.division.build()
+        @logic.command @commands.append_division.build()
       multiplicationClick: ->
-        @logic.command @commands.multiplication.build()
+        @logic.command @commands.append_multiplication.build()
       additionClick: ->
-        @logic.command @commands.addition.build()
+        @logic.command @commands.append_addition.build()
       numberClick: (val)->
-        @logic.command @commands.number.build(value: val.value)
+        @logic.command @commands.append_number.build(value: val.value)
 
       variableClick: (variable)->
 
