@@ -15,7 +15,7 @@ ttm.define 'equation_builder',
       initialize: (@opts)->
         math_button_builder = math_buttons.makeBuilder()
 
-        @equation_value = historic_value.build()
+        @expression_value = historic_value.build()
         @buttons = _EquationBuilderButtonsLogic.build(
           math_button_builder,
           math.commands)
@@ -34,8 +34,8 @@ ttm.define 'equation_builder',
         @mathml_converter = mathml_converter_builder.build()
 
         @logic = _EquationBuilderLogic.build(
-          math.equation,
-          @equation_value,
+          math.expression,
+          @expression_value,
           display,
           @mathml_converter, @logger)
 
@@ -51,16 +51,16 @@ ttm.define 'equation_builder',
     class_mixer(EquationBuilder)
 
     class _EquationBuilderLogic
-      initialize: (@equation_builder, @equation, @display, @mathml_conversion_builder, @logger)->
+      initialize: (@expression_builder, @expression, @display, @mathml_conversion_builder, @logger)->
         @reset()
         @updateDisplay()
 
       command: (cmd)->
-        @equation.updatedo((it)->cmd.invoke(it))
+        @expression.updatedo((it)->cmd.invoke(it))
         @updateDisplay()
 
       reset: ->
-        @equation.update(@equation_builder.build())
+        @expression.update(@expression_builder.build())
 
       updateDisplay: ->
         mathml = @mathML()
@@ -68,7 +68,7 @@ ttm.define 'equation_builder',
         @display.update(mathml)
 
       mathML: ->
-        @mathml_conversion_builder.convert(@equation.current().expression)
+        @mathml_conversion_builder.convert(@expression.current())
 
     class_mixer(_EquationBuilderLogic)
 
