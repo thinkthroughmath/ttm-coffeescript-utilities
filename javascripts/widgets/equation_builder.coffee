@@ -75,7 +75,6 @@ ttm.define 'equation_builder',
     class _EquationBuilderButtonsLogic
       initialize: (@builder, @commands)->
         @numbers = @builder.base10Digits(click: (num)=> @numberClick(num))
-        @multiplication = @builder.multiplication click: => @multiplicationClick()
         @decimal = @builder.decimal click: => @decimalClick()
         @negative = @builder.negative click: => @negativeClick()
         @addition = @builder.addition click: => @additionClick()
@@ -99,8 +98,11 @@ ttm.define 'equation_builder',
 
       piClick: ->
       rparenClick: ->
+        @logic.command @commands.close_sub_expression.build()
+
       lparenClick: ->
       exponentClick: ->
+        @logic.command @commands.exponentiate_last.build()
       square_rootClick: ->
       squareClick: ->
         @logic.command @commands.exponentiate_last.build(power: 2, power_closed: true)
@@ -109,6 +111,7 @@ ttm.define 'equation_builder',
       clearClick: ->
         @logic.reset()
       equalsClick: ->
+        @logic.command @commands.append_equals.build()
       subtractionClick: ->
         @logic.command @commands.append_subtraction.build()
       divisionClick: ->
@@ -135,16 +138,16 @@ ttm.define 'equation_builder',
 
       renderNumberPanel: ->
         number_panel = $("<div class='number-panel'></div>")
-        @render_numbers [7..9], number_panel
-        @render_numbers [4..6], number_panel
-        @render_numbers [1..3], number_panel
-        @render_numbers [0], number_panel
+        @renderNumbers [7..9], number_panel
+        @renderNumbers [4..6], number_panel
+        @renderNumbers [1..3], number_panel
+        @renderNumbers [0], number_panel
         @buttons.decimal.render(element: number_panel)
         @buttons.equals.render(element: number_panel)
 
         @element.append number_panel
 
-      render_numbers: (nums, element)->
+      renderNumbers: (nums, element)->
         for num in nums
           @buttons.numbers[num].render(element: element)
 
@@ -154,7 +157,6 @@ ttm.define 'equation_builder',
 
         @buttons.multiplication.render(element: control_panel)
         @buttons.addition.render(element: control_panel)
-        @buttons.multiplication.render(element: control_panel)
         @buttons.division.render(element: control_panel)
         @buttons.subtraction.render(element: control_panel)
         @buttons.negative.render(element: control_panel)
