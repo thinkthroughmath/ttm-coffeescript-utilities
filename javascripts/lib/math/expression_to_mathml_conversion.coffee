@@ -22,9 +22,18 @@ ttm.define 'lib/math/expression_to_mathml_conversion',
           mathml = ""
           for exp, i in @expression
             mathml += refinement.refine(exp).toMathML(@, i)
-          "<mrow>#{mathml}</mrow>"
+          if @expression.length > 1
+            "<mrow>#{mathml}</mrow>"
+          else
+            mathml
       });
 
+
+    refinement.forType(math.components.equals,
+      {
+        toMathML: ->
+          "<mo>=</mo>"
+      });
 
     refinement.forType(math.components.addition,
       {
