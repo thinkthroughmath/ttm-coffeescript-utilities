@@ -53,7 +53,6 @@ ttm.define 'equation_builder',
     class _EquationBuilderLogic
       initialize: (@expression_builder, @expression, @display, @mathml_conversion_builder, @logger)->
         @reset()
-        @updateDisplay()
 
       command: (cmd)->
         @expression.updatedo((it)->cmd.invoke(it))
@@ -61,6 +60,7 @@ ttm.define 'equation_builder',
 
       reset: ->
         @expression.update(@expression_builder.build())
+        @updateDisplay()
 
       updateDisplay: ->
         mathml = @mathML()
@@ -90,20 +90,22 @@ ttm.define 'equation_builder',
         @rparen = @builder.rparen click: => @rparenClick()
         @pi = @builder.pi click: => @piClick()
 
-      setLogic: (@logic)->
+      setLogic: ((@logic)->)
       variableButtons: (variables)->
         @variables = @builder.variables
           variables: variables,
           click: (variable)=> @variableClick(variable)
 
       piClick: ->
+        @logic.command @commands.append_pi.build()
       rparenClick: ->
         @logic.command @commands.close_sub_expression.build()
-
       lparenClick: ->
+        @logic.command @commands.open_sub_expression.build()
       exponentClick: ->
         @logic.command @commands.exponentiate_last.build()
       square_rootClick: ->
+        throw "UNFINISHED BUTTON FILL ME IN "
       squareClick: ->
         @logic.command @commands.exponentiate_last.build(power: 2, power_closed: true)
       decimalClick: ->
@@ -122,9 +124,8 @@ ttm.define 'equation_builder',
         @logic.command @commands.append_addition.build()
       numberClick: (val)->
         @logic.command @commands.append_number.build(value: val.value)
-
       variableClick: (variable)->
-
+        throw "UNFINISHED BUTTON FILL ME IN "
     class_mixer(_EquationBuilderButtonsLogic)
 
     class _EquationBuilderLayout

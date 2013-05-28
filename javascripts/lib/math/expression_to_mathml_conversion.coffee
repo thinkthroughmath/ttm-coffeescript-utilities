@@ -18,12 +18,15 @@ ttm.define 'lib/math/expression_to_mathml_conversion',
 
     refinement.forType(math.expression,
       {
-        toMathML: ->
+        toMathML: (is_root=false)->
           mathml = ""
           for exp, i in @expression
-            mathml += refinement.refine(exp).toMathML(@, i)
+            mathml += refinement.refine(exp).toMathML()
           if @expression.length > 1
-            "<mrow>#{mathml}</mrow>"
+            if is_root
+              "<mrow>#{mathml}</mrow>"
+            else
+              "<mfenced>#{mathml}</mfenced>"
           else
             mathml
       });
@@ -59,10 +62,16 @@ ttm.define 'lib/math/expression_to_mathml_conversion',
           "<mo>-</mo>"
       });
 
+    refinement.forType(math.components.pi,
+      {
+        toMathML: ->
+          "<mi>&pi;</mi>"
+      });
+
     class ExpressionToMathMLConversion
       initialize: ()->
       convert: (expression)->
-        refinement.refine(expression).toMathML();
+        refinement.refine(expression).toMathML(true);
 
     class_mixer ExpressionToMathMLConversion
 
