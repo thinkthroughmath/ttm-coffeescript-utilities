@@ -68,6 +68,26 @@ ttm.define 'lib/math/expression_to_mathml_conversion',
           "<mi>&pi;</mi>"
       });
 
+    refinement.forType(math.components.root,
+      {
+        isSquareRoot: ->
+          degree = @degree()
+          if degree.size() == 1
+            first = @degree().first()
+            first instanceof math.components.number and first.value() == 2
+          else
+            false
+
+        toMathML: ->
+          degree_ml = refinement.refine(@degree()).toMathML();
+          radicand_ml = refinement.refine(@radicand()).toMathML();
+          if @isSquareRoot()
+            "<msqrt>#{radicand_ml}</msqrt>"
+          else
+            "<mroot>#{radicand_ml}#{degree_ml}</mroot>"
+      });
+
+
     class ExpressionToMathMLConversion
       initialize: ()->
       convert: (expression)->

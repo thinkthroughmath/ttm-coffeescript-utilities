@@ -105,7 +105,7 @@ ttm.define 'equation_builder',
       exponentClick: ->
         @logic.command @commands.exponentiate_last.build()
       square_rootClick: ->
-        throw "UNFINISHED BUTTON FILL ME IN "
+        @logic.command @commands.append_root.build(degree: 2)
       squareClick: ->
         @logic.command @commands.exponentiate_last.build(power: 2, power_closed: true)
       decimalClick: ->
