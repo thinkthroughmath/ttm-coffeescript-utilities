@@ -125,7 +125,8 @@ ttm.define 'equation_builder',
       numberClick: (val)->
         @logic.command @commands.append_number.build(value: val.value)
       variableClick: (variable)->
-        throw "UNFINISHED BUTTON FILL ME IN "
+        @logic.command @commands.append_variable.build(variable: variable.value)
+
     class_mixer(_EquationBuilderButtonsLogic)
 
     class _EquationBuilderLayout

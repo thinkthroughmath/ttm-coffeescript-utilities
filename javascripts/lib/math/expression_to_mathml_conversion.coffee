@@ -68,6 +68,13 @@ ttm.define 'lib/math/expression_to_mathml_conversion',
           "<mi>&pi;</mi>"
       });
 
+    refinement.forType(math.components.variable,
+      {
+        toMathML: ->
+          "<mi>#{@name()}</mi>"
+      });
+
+
     refinement.forType(math.components.root,
       {
         isSquareRoot: ->
