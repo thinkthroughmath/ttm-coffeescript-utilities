@@ -131,9 +131,10 @@ ttm.define 'equation_builder',
 
     class _EquationBuilderLayout
       initialize: (@display, @buttons)->
-      render: (@element)->
-        element = @element
-        @display.render(class: "equation-display", element: element)
+      render: (@parent)->
+        @element = $("<div class='equation-builder'></div>")
+        @parent.append(@element)
+        @display.render(class: "equation-display", element: @element)
 
         @renderNumberPanel()
         @renderControlPanel()

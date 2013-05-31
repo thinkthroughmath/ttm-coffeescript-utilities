@@ -1,29 +1,63 @@
+//= require ./math_buttons
+@import "math_buttons";
+
+
+
+$scalar: 0.7;
+
+
 
 div.equation-builder
 {
-    background-color: green;
-    width: 100%;
-    height: 200px;
+    background: image-url('widgets/calculator_bg.png') !important;
+    width: 622px;
+    overflow: hidden;
 
     figure.equation-display{
-        height: 100px;
+        height: 50px;
+        margin-top: 10px;
     }
 
     div.number-panel
     {
         float: left;
-        width: 66px;
+        width: 200px * $scalar;
     }
 
     div.control-panel
     {
         float: left;
-        width: 100px;
+        width: 200px  * $scalar;
     }
 
-    div.variables-panel
+    div.variable-panel
     {
         float: left;
-        width: 100px;
+        width: 100px  * $scalar;
+
+        button {
+            width: 100px  * $scalar;
+        }
     }
+    @include math-button-sizing($scalar);
+
+    figure.equation-display {
+        background-color: white;
+        border-radius: $calculator_border_radius;
+        -webkit-box-shadow: inset 0 0 5px $box_shadow_color;
+           -moz-box-shadow: inset 0 0 5px $box_shadow_color;
+                box-shadow: inner 0 0 5px $box_shadow_color;
+        font-size: 2.3em;
+        height: 45px;
+        margin: auto;
+        margin-bottom: 14px;
+        margin-top: 10px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding: 1px 8px 8px 1px;
+        text-align: right;
+        white-space: nowrap;
+        width: 90%;
+    }
+
 }
