@@ -1,27 +1,33 @@
 #= require almond
 #= require lib
 #= require lib/logger
-#= require widgets/ui_elements
-#= require widgets/mathml
 #= require lib/math
 #= require lib/math/buttons
 #= require lib/math/expression_to_mathml_conversion
+#= require lib/math/expression_manipulation
+#= require widgets/mathml_display
 
 ttm.define 'equation_builder',
-  ["lib/class_mixer", "lib/math/buttons", 'widgets/ui_elements', 'lib/math', 'lib/historic_value',
-   'lib/math/expression_to_mathml_conversion', 'logger'],
-  (class_mixer, math_buttons, ui_elements, math, historic_value, mathml_converter_builder, logger_builder)->
+  ["lib/class_mixer", "lib/math/buttons", 'lib/math', 'lib/historic_value',
+   'lib/math/expression_to_mathml_conversion', 'logger',
+   'lib/math/expression_manipulation'],
+  ( class_mixer, math_buttons, math, historic_value, mathml_converter_builder,
+    logger_builder, expression_manipulation_source_builder)->
     class EquationBuilder
       initialize: (@opts)->
         math_button_builder = math_buttons.makeBuilder()
 
+        @expression_component_source = ttm.lib.math.ExpressionComponentSource.build()
+        @expression_manipulation_source = expression_manipulation_source_builder.build(@expression_component_source)
         @expression_value = historic_value.build()
+
         @buttons = _EquationBuilderButtonsLogic.build(
           math_button_builder,
-          math.commands)
+          @expression_manipulation_source)
+
         @logger = @opts.logger || logger_builder.build()
 
-        display = ui_elements.mathml_display_builder.build(mathml_renderer: @opts.mathml_renderer)
+        display = ttm.widgets.MathMLDisplay.build(mathml_renderer: @opts.mathml_renderer)
 
         @layout = _EquationBuilderLayout.build(
           display,
@@ -31,10 +37,10 @@ ttm.define 'equation_builder',
         if @opts.variables
           @registerVariables(@opts.variables)
 
-        @mathml_converter = mathml_converter_builder.build()
+        @mathml_converter = mathml_converter_builder.build(@expression_component_source)
 
         @logic = _EquationBuilderLogic.build(
-          math.expression,
+          (opts)=> @expression_component_source.build_expression(opts),
           @expression_value,
           display,
           @mathml_converter, @logger)
@@ -51,7 +57,7 @@ ttm.define 'equation_builder',
     class_mixer(EquationBuilder)
 
     class _EquationBuilderLogic
-      initialize: (@expression_builder, @expression, @display, @mathml_conversion_builder, @logger)->
+      initialize: (@build_expression, @expression, @display, @mathml_conversion_builder, @logger)->
         @reset()
 
       command: (cmd)->
@@ -59,7 +65,7 @@ ttm.define 'equation_builder',
         @updateDisplay()
 
       reset: ->
-        @expression.update(@expression_builder.build())
+        @expression.update(@build_expression())
         @updateDisplay()
 
       updateDisplay: ->
@@ -69,6 +75,7 @@ ttm.define 'equation_builder',
 
       mathML: ->
         @mathml_conversion_builder.convert(@expression.current())
+
 
     class_mixer(_EquationBuilderLogic)
 
@@ -97,35 +104,35 @@ ttm.define 'equation_builder',
           click: (variable)=> @variableClick(variable)
 
       piClick: ->
-        @logic.command @commands.append_pi.build()
+        @logic.command @commands.build_append_pi()
       rparenClick: ->
-        @logic.command @commands.close_sub_expression.build()
+        @logic.command @commands.build_close_sub_expression()
       lparenClick: ->
-        @logic.command @commands.open_sub_expression.build()
+        @logic.command @commands.build_open_sub_expression()
       exponentClick: ->
-        @logic.command @commands.exponentiate_last.build()
+        @logic.command @commands.build_exponentiate_last()
       square_rootClick: ->
-        @logic.command @commands.append_root.build(degree: 2)
+        @logic.command @commands.build_append_root(degree: 2)
       squareClick: ->
-        @logic.command @commands.exponentiate_last.build(power: 2, power_closed: true)
+        @logic.command @commands.build_exponentiate_last(power: 2, power_closed: true)
       decimalClick: ->
-        @logic.command @commands.append_decimal.build()
+        @logic.command @commands.build_append_decimal()
       clearClick: ->
         @logic.reset()
       equalsClick: ->
-        @logic.command @commands.append_equals.build()
+        @logic.command @commands.build_append_equals()
       subtractionClick: ->
-        @logic.command @commands.append_subtraction.build()
+        @logic.command @commands.build_append_subtraction()
       divisionClick: ->
-        @logic.command @commands.append_division.build()
+        @logic.command @commands.build_append_division()
       multiplicationClick: ->
-        @logic.command @commands.append_multiplication.build()
+        @logic.command @commands.build_append_multiplication()
       additionClick: ->
-        @logic.command @commands.append_addition.build()
+        @logic.command @commands.build_append_addition()
       numberClick: (val)->
-        @logic.command @commands.append_number.build(value: val.value)
+        @logic.command @commands.build_append_number(value: val.value)
       variableClick: (variable)->
-        @logic.command @commands.append_variable.build(variable: variable.value)
+        @logic.command @commands.build_append_variable(variable: variable.value)
 
     class_mixer(_EquationBuilderButtonsLogic)
 
@@ -179,6 +186,6 @@ ttm.define 'equation_builder',
 
     class_mixer(_EquationBuilderLayout)
 
-
     return EquationBuilder
+
 
