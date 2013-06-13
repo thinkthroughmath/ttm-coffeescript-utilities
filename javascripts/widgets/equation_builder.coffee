@@ -5,7 +5,9 @@
 #= require lib/math/buttons
 #= require lib/math/expression_to_mathml_conversion
 #= require lib/math/expression_manipulation
+#= require lib/math/expression_position
 #= require widgets/mathml_display
+#= require widgets/equation_builder_rendered_mathml_modifier
 
 ttm.define 'equation_builder',
   ["lib/class_mixer", "lib/math/buttons", 'lib/math', 'lib/historic_value',
@@ -17,9 +19,17 @@ ttm.define 'equation_builder',
       initialize: (@opts)->
         math_button_builder = math_buttons.makeBuilder()
 
-        @expression_component_source = ttm.lib.math.ExpressionComponentSource.build()
-        @expression_manipulation_source = expression_manipulation_source_builder.build(@expression_component_source)
-        @expression_value = historic_value.build()
+        expression_component_source = ttm.lib.math.ExpressionComponentSource.build()
+
+        expression_position_builder = ttm.lib.math.ExpressionPosition
+
+        @expression_manipulation_source = expression_manipulation_source_builder.build(
+          expression_component_source,
+          expression_position_builder)
+
+        @expression_position_value = historic_value.build()
+        reset = @expression_manipulation_source.build_reset().perform()
+        @expression_position_value.update(reset)
 
         @buttons = _EquationBuilderButtonsLogic.build(
           math_button_builder,
@@ -27,11 +37,25 @@ ttm.define 'equation_builder',
 
         @logger = @opts.logger || logger_builder.build()
 
-        display = ttm.widgets.MathMLDisplay.build(mathml_renderer: @opts.mathml_renderer)
+
+        equation_component_retriever = EquationComponentRetriever.
+          build(@expression_position_value, ttm.lib.math.ExpressionTraversal)
+        mathml_display_modifier = ttm.widgets.EquationBuilderRenderedMathMLModifier.
+          build(
+            equation_component_retriever
+            (id, type)=> @expressionPositionSelected(id, type)
+            => @expression_position_value.current()
+            @opts.element)
+
+        display = ttm.widgets.MathMLDisplay.build
+          mathml_renderer: @opts.mathml_renderer
+          after_update: ->
+            mathml_display_modifier.afterUpdate.apply(mathml_display_modifier, arguments)
 
         @layout = _EquationBuilderLayout.build(
           display,
           @buttons)
+
         @layout.render(@opts.element)
 
         if @opts.variables
@@ -41,41 +65,44 @@ ttm.define 'equation_builder',
 
         @logic = _EquationBuilderLogic.build(
           (opts)=> @expression_component_source.build_expression(opts),
-          @expression_value,
+          @expression_position_value,
           display,
-          @mathml_converter, @logger)
+          @mathml_converter,
+          @logger)
 
         @buttons.setLogic @logic
+        @logic.updateDisplay()
 
       registerVariables: (@variables)->
         variable_buttons = @buttons.variableButtons(@variables)
         @layout.renderVariablePanel(variable_buttons)
 
-      mathML: ->
-        @logic.mathML()
+      # leaving in until know is not necessary for tests
+      # mathML: ->
+      #   @logic.mathML()
+
+      expressionPositionSelected: (id, type)->
+        cmd = @expression_manipulation_source.build_update_position(element_id: id, type: type)
+        @logic.command(cmd)
 
     class_mixer(EquationBuilder)
 
     class _EquationBuilderLogic
-      initialize: (@build_expression, @expression, @display, @mathml_conversion_builder, @logger)->
-        @reset()
-
-      command: (cmd)->
-        @expression.updatedo((it)->cmd.invoke(it))
+      initialize: (@build_expression, @expression_position, @display, @mathml_converter, @logger)->
         @updateDisplay()
 
-      reset: ->
-        @expression.update(@build_expression())
+      command: (cmd)->
+        results = cmd.perform(@expression_position.current())
+        @expression_position.update(results)
         @updateDisplay()
 
       updateDisplay: ->
         mathml = @mathML()
-        @logger.info "updateDisplay updating to", mathml
+        console.log("updateDisplay updating to", mathml)
         @display.update(mathml)
 
       mathML: ->
-        @mathml_conversion_builder.convert(@expression.current())
-
+        @mathml_converter.convert(@expression_position.current())
 
     class_mixer(_EquationBuilderLogic)
 
@@ -102,15 +129,14 @@ ttm.define 'equation_builder',
         @variables = @builder.variables
           variables: variables,
           click: (variable)=> @variableClick(variable)
-
       piClick: ->
         @logic.command @commands.build_append_pi()
       rparenClick: ->
         @logic.command @commands.build_close_sub_expression()
       lparenClick: ->
-        @logic.command @commands.build_open_sub_expression()
+        @logic.command @commands.build_append_open_sub_expression()
       exponentClick: ->
-        @logic.command @commands.build_exponentiate_last()
+        @logic.command @commands.build_append_exponentiation()
       square_rootClick: ->
         @logic.command @commands.build_append_root(degree: 2)
       squareClick: ->
@@ -118,7 +144,7 @@ ttm.define 'equation_builder',
       decimalClick: ->
         @logic.command @commands.build_append_decimal()
       clearClick: ->
-        @logic.reset()
+        @logic.command @commands.build_reset()
       equalsClick: ->
         @logic.command @commands.build_append_equals()
       subtractionClick: ->
@@ -185,6 +211,14 @@ ttm.define 'equation_builder',
         @element.append(variable_panel)
 
     class_mixer(_EquationBuilderLayout)
+
+    class EquationComponentRetriever
+      initialize: (@exp_pos_val, @traversal_builder)->
+      findForID: (id)->
+        exp = @exp_pos_val.current().expression()
+        @traversal_builder.build(exp).findForID(id)
+
+    class_mixer(EquationComponentRetriever)
 
     return EquationBuilder
 
