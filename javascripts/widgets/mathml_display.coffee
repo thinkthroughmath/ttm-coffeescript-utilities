@@ -9,7 +9,7 @@ class MathMLDisplay
     opts = _.extend({}, @opts, opts)
     @figure = $("""
       <figure class='mathml-display #{opts.class}'>
-        #{@wrappedMathTag("<mrow><mn>0</mn></mrow>")}
+        #{@wrappedMathTag("")}
       </figure>
     """)
     opts.element.append @figure
@@ -23,7 +23,15 @@ class MathMLDisplay
     """
 
   update: (mathml)->
-    @mathml_renderer.renderMathMLInElement(@wrappedMathTag(mathml), @figure)
+    @mathml_renderer.renderMathMLInElement(
+      @wrappedMathTag(mathml)
+      @figure
+      => @opts.after_update(@figure)
+    )
 
-window.ttm.widgets.MathMLDisplay =
-  MathMLDisplay = ttm.class_mixer(MathMLDisplay)
+ttm.class_mixer(MathMLDisplay)
+
+
+
+# exports
+window.ttm.widgets.MathMLDisplay = MathMLDisplay
