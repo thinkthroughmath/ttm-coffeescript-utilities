@@ -4,14 +4,55 @@
 
 
 $scalar: 0.7;
+$cursor-color: #aaa;
 
 
+.mfenced:hover {
+    // border-right: 2px solid $cursor-color;
+}
+
+.mfenced {
+    .mo.cursor-previous {
+        border-left: 2px solid $cursor-color !important;
+    }
+}
+.mfenced {
+    .mo {
+        border-left: 2px solid transparent !important;
+    }
+}
 
 div.equation-builder
 {
     background: image-url('widgets/calculator_bg.png') !important;
     width: 622px;
     overflow: hidden;
+
+    .cursor-location {
+        border-right: 2px solid transparent;
+    }
+    .cursor-location:hover {
+        border-right: 2px solid $cursor-color;
+    }
+
+    .has-cursor-right {
+        border-right: 2px solid transparent;
+    }
+
+    .has-cursor-right-active {
+        border-right: 2px solid $cursor-color;
+    }
+
+    .has-cursor-show-left {
+        border-left: 2px solid $cursor-color;
+    }
+
+    .has-cursor-left {
+        border-left: 2px solid transparent;
+    }
+    .has-cursor-left-active {
+        border-left: 2px solid $cursor-color;
+    }
 
     figure.equation-display{
         height: 50px;
