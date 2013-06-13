@@ -1,9 +1,21 @@
 ttm.define 'lib/math/expression_to_mathml_conversion',
   ['lib/class_mixer', 'lib/object_refinement'],
   (class_mixer, object_refinement)->
+
+
+    # "private methods" to be used in refinements
+    classes_str = (classes)->
+      str = _(classes).join(' ')
+      "class='#{str}'"
+
+    mathml_cursor_space = (classes=[])->
+      cursor_classes = classes.concat ['position-move-target']
+      "<mi #{classes_str(cursor_classes)}>&nbsp;</mi>"
+
     class ExpressionToMathMLConversion
       initialize: (@component_source)->
         @component_source ||= ttm.lib.math.ExpressionComponentSource.build()
+
         refinement = object_refinement.build()
         refinement.forType(@component_source.classes.number,
           {
@@ -13,25 +25,29 @@ ttm.define 'lib/math/expression_to_mathml_conversion',
 
         refinement.forType(@component_source.classes.exponentiation,
           {
-            toMathML: ->
-              base = refinement.refine(@base())
-              power = refinement.refine(@power())
-              "<msup>#{base.toMathML()}#{power.toMathML()}</msup>"
+            toMathML: (opts={})->
+              base_opts = ttm.defaults {
+                classes: ['exponentiation-base'],
+                part_of: 'exponent'
+              }, opts
+              power_opts = ttm.defaults {
+                classes: ['exponentiation-power']
+                part_of: 'exponent'
+              }, opts
+
+              base = refinement.refine(@base()).toMathML(base_opts)
+              power = refinement.refine(@power()).toMathML(power_opts)
+
+              exp_math_ml = "<msup>#{base}#{power}</msup>"
+
+              exp_math_ml
           });
 
         refinement.forType(@component_source.classes.expression,
           {
-            toMathML: (is_root=false)->
-              mathml = ""
-              for exp, i in @expression
-                mathml += refinement.refine(exp).toMathML()
-              if @expression.length > 1
-                if is_root
-                  "<mrow>#{mathml}</mrow>"
-                else
-                  "<mfenced>#{mathml}</mfenced>"
-              else
-                mathml
+            toMathML: (opts={})->
+              ret = ConvertExpressionComponentInstance.build(@, refinement).toMathML(opts)
+              ret
           });
 
 
@@ -88,21 +104,77 @@ ttm.define 'lib/math/expression_to_mathml_conversion',
               else
                 false
 
-            toMathML: ->
-              degree_ml = refinement.refine(@degree()).toMathML();
-              radicand_ml = refinement.refine(@radicand()).toMathML();
+            toMathML: (opts={})->
+              degree_ml = refinement.refine(@degree()).toMathML(opts);
+              radicand_ml = refinement.refine(@radicand()).toMathML(opts);
               if @isSquareRoot()
-                "<msqrt>#{radicand_ml}</msqrt>"
+                mathml = "<msqrt>#{radicand_ml}</msqrt>"
               else
-                "<mroot>#{radicand_ml}#{degree_ml}</mroot>"
+                mathml = "<mroot>#{radicand_ml}#{degree_ml}</mroot>"
+
+              mathml += mathml_cursor_space()
+
           });
 
-        refinement.forDefault({toMathML: -> throw "toMathML NOT DEFINED FOR #{@unrefined().toString()}"})
+        refinement.forDefault({toMathML: -> throw "toMathML NOT DEFINED FOR #{@klass}"})
         @refinement = refinement
 
-      convert: (expression)->
-        @refinement.refine(expression).toMathML(true);
+      convert: (expression_position)->
+        ret = @refinement.refine(expression_position.expression()).toMathML
+          position: expression_position
+          is_root: true
+        ret
 
     class_mixer ExpressionToMathMLConversion
 
+    class ConvertExpressionComponentInstance
+      initialize: (@expression, @refinement)->
+      toMathML: (@opts={})->
+        expression_position = @opts.position
+        elem_mathml = @elementsMathML(_.extend({}, @opts, {is_root: false}))
+        @wrapInTags(elem_mathml, expression_position)
+
+      elementsMathML: (opts)->
+        mathml = ""
+        for exp, i in @expression.expression
+          mathml += @refinement.refine(exp).toMathML(opts)
+        mathml
+
+      wrapInTags: (mathml, expression_position)->
+        classes = ["expression-component-id-#{@expression.id()}",
+          "expression-component-position-type-inner"].concat(@opts.classes || [])
+
+        if @opts.part_of != 'exponent'
+          classes = classes.concat(["expression"])
+
+        if @expression.isOpen()
+          ret = "<mrow #{@classes_str(classes)}><mo>(</mo>#{mathml}</mrow>"
+        else if @opts.is_root
+          classes.push 'is-root'
+          ret = "<mrow #{@classes_str(classes)}>#{mathml}#{@possibleCursorSpace()}</mrow>"
+        else
+          ret = """
+            <mrow #{@classes_str(classes)}>
+              <mo>(</mo>
+              #{mathml}
+              <mo>)</mo>
+            </mrow>
+            """
+        ret
+
+      possibleCursorSpace: ->
+        if not @shouldShowParentheses()
+          mathml_cursor_space()
+
+
+      shouldShowParentheses: ->
+        not @opts.is_root
+
+      classes_str: (classes)->
+        str = _(classes).join(' ')
+        ret = "class='#{str}'"
+        ret
+
+
+    class_mixer ConvertExpressionComponentInstance
     return ExpressionToMathMLConversion
