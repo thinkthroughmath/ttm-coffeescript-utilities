@@ -78,8 +78,8 @@ ttm.define 'equation_builder',
         @layout.renderVariablePanel(variable_buttons)
 
       # leaving in until know is not necessary for tests
-      # mathML: ->
-      #   @logic.mathML()
+      mathML: ->
+        @logic.mathML()
 
       expressionPositionSelected: (id, type)->
         cmd = @expression_manipulation_source.build_update_position(element_id: id, type: type)
@@ -98,7 +98,6 @@ ttm.define 'equation_builder',
 
       updateDisplay: ->
         mathml = @mathML()
-        console.log("updateDisplay updating to", mathml)
         @display.update(mathml)
 
       mathML: ->

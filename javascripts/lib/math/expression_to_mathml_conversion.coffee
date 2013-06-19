@@ -155,9 +155,9 @@ ttm.define 'lib/math/expression_to_mathml_conversion',
         else
           ret = """
             <mrow #{@classes_str(classes)}>
-              <mo>(</mo>
+              <mo class='opening-parenthesis'>(</mo>
               #{mathml}
-              <mo>)</mo>
+              <mo class='closing-parenthesis'>)</mo>
             </mrow>
             """
         ret
