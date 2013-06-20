@@ -1,6 +1,5 @@
 #= require almond
 #= require lib
-#= require lib/logger
 #= require lib/math
 #= require lib/math/buttons
 #= require lib/math/expression_to_mathml_conversion
@@ -11,10 +10,10 @@
 
 ttm.define 'equation_builder',
   ["lib/class_mixer", "lib/math/buttons", 'lib/math', 'lib/historic_value',
-   'lib/math/expression_to_mathml_conversion', 'logger',
+   'lib/math/expression_to_mathml_conversion',
    'lib/math/expression_manipulation'],
   ( class_mixer, math_buttons, math, historic_value, mathml_converter_builder,
-    logger_builder, expression_manipulation_source_builder)->
+    expression_manipulation_source_builder)->
     class EquationBuilder
       initialize: (@opts)->
         math_button_builder = math_buttons.makeBuilder()
@@ -34,9 +33,6 @@ ttm.define 'equation_builder',
         @buttons = _EquationBuilderButtonsLogic.build(
           math_button_builder,
           @expression_manipulation_source)
-
-        @logger = @opts.logger || logger_builder.build()
-
 
         equation_component_retriever = EquationComponentRetriever.
           build(@expression_position_value, ttm.lib.math.ExpressionTraversal)
@@ -68,7 +64,7 @@ ttm.define 'equation_builder',
           @expression_position_value,
           display,
           @mathml_converter,
-          @logger)
+          )
 
         @buttons.setLogic @logic
         @logic.updateDisplay()
@@ -88,7 +84,7 @@ ttm.define 'equation_builder',
     class_mixer(EquationBuilder)
 
     class _EquationBuilderLogic
-      initialize: (@build_expression, @expression_position, @display, @mathml_converter, @logger)->
+      initialize: (@build_expression, @expression_position, @display, @mathml_converter)->
         @updateDisplay()
 
       command: (cmd)->
