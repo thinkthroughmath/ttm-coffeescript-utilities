@@ -15,7 +15,13 @@ ttm.define 'equation_builder',
   ( class_mixer, math_buttons, math, historic_value, mathml_converter_builder,
     expression_manipulation_source_builder)->
     class EquationBuilder
-      initialize: (@opts)->
+      initialize: (opts={})->
+        @element = opts.element
+        @checkCorrectCallback = opts.check_correct_callback
+
+        # save the equation builder onto the dom element for external messaging
+        opts.element[0].equation_builder = @
+
         math_button_builder = math_buttons.makeBuilder()
 
         expression_component_source = ttm.lib.math.ExpressionComponentSource.build()
@@ -41,10 +47,10 @@ ttm.define 'equation_builder',
             equation_component_retriever
             (id, type)=> @expressionPositionSelected(id, type)
             => @expression_position_value.current()
-            @opts.element)
+            opts.element)
 
         display = ttm.widgets.MathMLDisplay.build
-          mathml_renderer: @opts.mathml_renderer
+          mathml_renderer: opts.mathml_renderer
           after_update: ->
             mathml_display_modifier.afterUpdate.apply(mathml_display_modifier, arguments)
 
@@ -52,10 +58,10 @@ ttm.define 'equation_builder',
           display,
           @buttons)
 
-        @layout.render(@opts.element)
+        @layout.render(opts.element)
 
-        if @opts.variables
-          @registerVariables(@opts.variables)
+        if opts.variables
+          @registerVariables(opts.variables)
 
         @mathml_converter = mathml_converter_builder.build(@expression_component_source)
 
@@ -80,6 +86,10 @@ ttm.define 'equation_builder',
       expressionPositionSelected: (id, type)->
         cmd = @expression_manipulation_source.build_update_position(element_id: id, type: type)
         @logic.command(cmd)
+
+      checkCorrect: ->
+        alert 'lollerscates'
+
 
     class_mixer(EquationBuilder)
 
@@ -215,6 +225,8 @@ ttm.define 'equation_builder',
 
     class_mixer(EquationComponentRetriever)
 
+
+    window.ttm.EquationBuilder = EquationBuilder
     return EquationBuilder
 
 
