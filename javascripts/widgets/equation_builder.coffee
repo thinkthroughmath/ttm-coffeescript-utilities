@@ -5,15 +5,14 @@
 #= require lib/math/expression_to_mathml_conversion
 #= require lib/math/expression_manipulation
 #= require lib/math/expression_position
+#= require lib/math/equation_checking
 #= require widgets/mathml_display
 #= require widgets/equation_builder_rendered_mathml_modifier
 
 ttm.define 'equation_builder',
-  ["lib/class_mixer", "lib/math/buttons", 'lib/math', 'lib/historic_value',
-   'lib/math/expression_to_mathml_conversion',
-   'lib/math/expression_manipulation'],
-  ( class_mixer, math_buttons, math, historic_value, mathml_converter_builder,
-    expression_manipulation_source_builder)->
+  ["lib/class_mixer", "lib/math/buttons", 'lib/historic_value',
+   'lib/math/expression_to_mathml_conversion'],
+  ( class_mixer, math_buttons, historic_value, mathml_converter_builder)->
     class EquationBuilder
       initialize: (opts={})->
         @element = opts.element
@@ -24,13 +23,11 @@ ttm.define 'equation_builder',
 
         math_button_builder = math_buttons.makeBuilder()
 
-        expression_component_source = ttm.lib.math.ExpressionComponentSource.build()
+        @math_lib = ttm.lib.math.math_lib.build()
 
-        expression_position_builder = ttm.lib.math.ExpressionPosition
-
-        @expression_manipulation_source = expression_manipulation_source_builder.build(
-          expression_component_source,
-          expression_position_builder)
+        expression_component_source = @math_lib.components
+        expression_position_builder = @math_lib.expression_position
+        @expression_manipulation_source = @math_lib.commands
 
         @expression_position_value = historic_value.build()
         reset = @expression_manipulation_source.build_reset().perform()
@@ -41,7 +38,8 @@ ttm.define 'equation_builder',
           @expression_manipulation_source)
 
         equation_component_retriever = EquationComponentRetriever.
-          build(@expression_position_value, ttm.lib.math.ExpressionTraversal)
+          build(@expression_position_value, @math_lib.traversal)
+
         mathml_display_modifier = ttm.widgets.EquationBuilderRenderedMathMLModifier.
           build(
             equation_component_retriever
