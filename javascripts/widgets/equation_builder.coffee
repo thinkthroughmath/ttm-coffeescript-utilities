@@ -86,8 +86,11 @@ ttm.define 'equation_builder',
         @logic.command(cmd)
 
       checkCorrect: ->
-        alert 'lollerscates'
-
+        checked_json = ttm.lib.math.EquationChecking.build(
+          @expression_position_value.current(),
+          @variables,
+          @expression_manipulation_source)
+        @checkCorrectCallback(checked_json)
 
     class_mixer(EquationBuilder)
 

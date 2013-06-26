@@ -6,6 +6,10 @@
 $scalar: 0.7;
 $cursor-color: #aaa;
 
+#eb_wrapper {
+    height: 300px;
+
+}
 
 .mfenced:hover {
     // border-right: 2px solid $cursor-color;
@@ -54,10 +58,10 @@ div.equation-builder
         border-left: 2px solid $cursor-color;
     }
 
-    figure.equation-display{
-        height: 50px;
-        margin-top: 10px;
-    }
+    /* figure.equation-display{ */
+    /*     height: 50px; */
+    /*     margin-top: 10px; */
+    /* } */
 
     div.number-panel
     {
@@ -90,6 +94,7 @@ div.equation-builder
                 box-shadow: inner 0 0 5px $box_shadow_color;
         font-size: 2.3em;
         height: 45px;
+        height: 60px;
         margin: auto;
         margin-bottom: 14px;
         margin-top: 10px;
