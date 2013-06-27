@@ -86,10 +86,9 @@ ttm.define 'equation_builder',
         @logic.command(cmd)
 
       checkCorrect: ->
-        checked_json = ttm.lib.math.EquationChecking.build(
+        checked_json = @math_lib.equation_checking.build(
           @expression_position_value.current(),
-          @variables,
-          @expression_manipulation_source)
+          @variables).asJSON()
         @checkCorrectCallback(checked_json)
 
     class_mixer(EquationBuilder)
