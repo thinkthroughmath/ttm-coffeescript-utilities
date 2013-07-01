@@ -186,7 +186,7 @@ ttm.define 'equation_builder',
         @renderVariablePanel()
         @renderControlPanel()
         @renderDropdown()
-        #@renderNumberPanel()
+        @renderNumberPanel()
 
       renderDropdown: ->
         extra_buttons = $("""
