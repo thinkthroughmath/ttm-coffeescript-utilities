@@ -75,7 +75,8 @@ ttm.define 'equation_builder',
 
       registerVariables: (@variables)->
         variable_buttons = @buttons.variableButtons(@variables)
-        @layout.renderVariablePanel(variable_buttons)
+        @layout.renderVariablesInPanel(variable_buttons)
+        @layout.renderExplanatoryTableEntries(@variables)
 
       # leaving in until know is not necessary for tests
       mathML: ->
@@ -170,13 +171,46 @@ ttm.define 'equation_builder',
     class _EquationBuilderLayout
       initialize: (@display, @buttons)->
       render: (@parent)->
-        @element = $("<div class='equation-builder'></div>")
-        @parent.append(@element)
+        elt = $("""
+          <div class='equation-builder'>
+            <div class='equation-builder-main'></div>
+          </div>
+        """)
+        @wrapper = elt
+        @element = elt.find("div.equation-builder-main")
+
+        @parent.append(@wrapper)
         @display.render(class: "equation-display", element: @element)
 
-        @renderNumberPanel()
+        @renderExplanatoryTable()
+        @renderVariablePanel()
         @renderControlPanel()
+        @renderDropdown()
+        #@renderNumberPanel()
 
+      renderDropdown: ->
+        extra_buttons = $("""
+          <div class='equation-builder-extra-buttons'>
+            <div class='advanced'>
+              <div class='buttons'>
+                face cheese
+              </div>
+              <a href='#' class='extra-buttons-handle'>Advanced</a>
+            </div>
+            <div class='numbers'>
+              <div class='buttons'>
+                doot scoot
+              </div>
+              <a href='#' class='extra-buttons-handle'>Numbers</a>
+            </div>
+          </div>
+        """)
+
+        @wrapper.append extra_buttons
+
+        extra_buttons.find("a.extra-buttons-handle").on "click", ->
+          $(@).parent().find(".buttons").slideToggle()
+          false
       renderNumberPanel: ->
         number_panel = $("<div class='number-panel'></div>")
         @renderNumbers [7..9], number_panel
@@ -192,8 +226,48 @@ ttm.define 'equation_builder',
         for num in nums
           @buttons.numbers[num].render(element: element)
 
+      renderExplanatoryTable: ->
+        @explanatory_table = $("""
+          <div class='explanatory-table'>
+            <p>Use this table as a guide</p>
+            <table>
+              <thead>
+                <tr>
+                  <th class='number'>Number</th>
+                  <th class='unit'>Unit</th>
+                  <th class='variable-description'>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+          </div>
+        """)
+        @element.append(@explanatory_table)
+
+
+
+      explanatoryTableRow = (variable)->
+        value = if variable.is_unknown then "?" else variable.value
+        $("""
+          <tr>
+            <td>#{value}</td>
+            <td>#{variable.unit}</td>
+            <td>#{variable.name}</td>
+          </tr>
+        """)
+
+      renderExplanatoryTableEntries: (@variables)->
+        tbody = @explanatory_table.find("tbody")
+        for v in @variables
+          tbody.append(explanatoryTableRow(v))
+
       renderControlPanel: ->
-        control_panel = $("<div class='control-panel'></div>")
+        control_panel = $("""
+          <div class='control-panel'>
+            <p>Use these to show the relationship between values.</p>
+          </div>
+        """)
         @element.append control_panel
 
         @buttons.multiplication.render(element: control_panel)
@@ -209,11 +283,16 @@ ttm.define 'equation_builder',
         @buttons.rparen.render(element: control_panel)
         @buttons.pi.render(element: control_panel)
 
-      renderVariablePanel: (@variable_buttons)->
-        variable_panel = $("<div class='variable-panel'></div>")
+      renderVariablePanel: ->
+        @variable_panel = $("""
+          <div class='variable-panel'>
+            <p>Use these as values for the equation</p>
+          </div>""")
+        @element.append(@variable_panel)
+
+      renderVariablesInPanel: (@variable_buttons)->
         for v in @variable_buttons
-          v.render(element: variable_panel)
-        @element.append(variable_panel)
+          v.render(element: @variable_panel)
 
     class_mixer(_EquationBuilderLayout)
 
