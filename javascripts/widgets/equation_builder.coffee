@@ -189,28 +189,31 @@ ttm.define 'equation_builder',
         @renderNumberPanel()
 
       renderDropdown: ->
-        extra_buttons = $("""
+        @extra_buttons = $("""
           <div class='equation-builder-extra-buttons'>
+            <div class='numbers'>
+              <div class='buttons'>
+                <div class='buttons-wrap'>
+                </div>
+              </div>
+              <div class='link-wrap'><a href='#' class='extra-buttons-handle'>Numbers</a></div>
+            </div>
+
             <div class='advanced'>
               <div class='buttons'>
                 face cheese
               </div>
-              <a href='#' class='extra-buttons-handle'>Advanced</a>
-            </div>
-            <div class='numbers'>
-              <div class='buttons'>
-                doot scoot
-              </div>
-              <a href='#' class='extra-buttons-handle'>Numbers</a>
+              <div class='link-wrap'><a href='#' class='extra-buttons-handle'>Advanced</a></div>
             </div>
           </div>
         """)
 
-        @wrapper.append extra_buttons
+        @wrapper.append @extra_buttons
 
-        extra_buttons.find("a.extra-buttons-handle").on "click", ->
-          $(@).parent().find(".buttons").slideToggle()
+        @extra_buttons.find("a.extra-buttons-handle").on "click", ->
+          $(@).parent().parent().find(".buttons").slideToggle()
           false
+
       renderNumberPanel: ->
         number_panel = $("<div class='number-panel'></div>")
         @renderNumbers [7..9], number_panel
@@ -220,7 +223,7 @@ ttm.define 'equation_builder',
         @buttons.decimal.render(element: number_panel)
         @buttons.equals.render(element: number_panel)
 
-        @element.append number_panel
+        @extra_buttons.find(".numbers .buttons  .buttons-wrap").append number_panel
 
       renderNumbers: (nums, element)->
         for num in nums
@@ -266,10 +269,12 @@ ttm.define 'equation_builder',
         control_panel = $("""
           <div class='control-panel'>
             <p>Use these to show the relationship between values.</p>
+            <div class='controls-wrap'>
+            </div>
           </div>
         """)
         @element.append control_panel
-
+        control_panel = control_panel.find('.controls-wrap')
         @buttons.multiplication.render(element: control_panel)
         @buttons.addition.render(element: control_panel)
         @buttons.division.render(element: control_panel)
