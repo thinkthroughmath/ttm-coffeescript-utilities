@@ -1,4 +1,6 @@
 //= require ./math_buttons
+//= require font-awesome
+
 @import "math_buttons";
 
 $scalar: 0.8;
@@ -94,7 +96,7 @@ div.equation-builder {
                 a {
                     display: block;
                     float: right;
-                    width: 50%;
+                    width: 60%;
                     padding: 4px;
                 }
             }
@@ -202,6 +204,9 @@ div.equation-builder {
                     text-transform: uppercase;
                     text-align: center;
                     border-radius: 0 0 $radius $radius;
+                }
+                a:hover {
+                    text-decoration: none;
                 }
             }
         }

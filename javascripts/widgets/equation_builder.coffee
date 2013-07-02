@@ -196,14 +196,14 @@ ttm.define 'equation_builder',
                 <div class='buttons-wrap'>
                 </div>
               </div>
-              <div class='link-wrap'><a href='#' class='extra-buttons-handle'>Numbers</a></div>
+              <div class='link-wrap'><a href='#' class='extra-buttons-handle'><span class='icon-caret-down'></span> Numbers</a></div>
             </div>
 
             <div class='advanced'>
               <div class='buttons'>
-                face cheese
+                (STUFFF)
               </div>
-              <div class='link-wrap'><a href='#' class='extra-buttons-handle'>Advanced</a></div>
+              <div class='link-wrap'><a href='#' class='extra-buttons-handle'><span class='icon-caret-down'></span> Advanced</a></div>
             </div>
           </div>
         """)
