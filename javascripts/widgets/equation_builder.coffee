@@ -1,13 +1,13 @@
 #= require almond
 #= require lib
 #= require lib/math
-#= require lib/math/buttons
 #= require lib/math/expression_to_mathml_conversion
 #= require lib/math/expression_manipulation
 #= require lib/math/expression_position
 #= require lib/math/equation_checking
 #= require widgets/mathml_display
 #= require widgets/equation_builder_rendered_mathml_modifier
+#= require widgets/math_buttons
 
 ttm.define 'equation_builder',
   ["lib/class_mixer", "lib/math/buttons", 'lib/historic_value',
