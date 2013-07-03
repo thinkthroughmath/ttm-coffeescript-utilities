@@ -102,15 +102,20 @@ div.equation-builder {
             }
         }
 
-        div.number-panel {
+        div.number-panel,  {
             text-align: center;
             @include math-button-sizing($scalar);
         }
+        div.advanced-panel {
+            text-align: center;
+            @include math-button-sizing($scalar);
+            button {
+                width: 45%;
+            }
+        }
     }
 
-
     // styling, colors, etc
-
 
     div.equation-builder-main {
         background: image-url('widgets/calculator_bg.png') !important;

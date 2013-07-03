@@ -130,6 +130,15 @@ ttm.define 'equation_builder',
         @rparen = @builder.rparen click: => @rparenClick()
         @pi = @builder.pi click: => @piClick()
 
+        @sin = @builder.fn value: "sin", label: "sin", click: => @sinClick()
+        @cos = @builder.fn value: "cos", label: "cos", click: => @cosClick()
+        @tan = @builder.fn value: "tan", label: "tan", click: => @tanClick()
+
+        @arcsin = @builder.fn value: "arcsin", label: "arcsin", click: => @arcsinClick()
+        @arccos = @builder.fn value: "arccos", label: "arccos", click: => @arccosClick()
+        @arctan = @builder.fn value: "arctan", label: "arctan", click: => @arctanClick()
+
+
       setLogic: ((@logic)->)
       variableButtons: (variables)->
         @variables = @builder.variables
@@ -165,6 +174,18 @@ ttm.define 'equation_builder',
         @logic.command @commands.build_append_number(value: val.value)
       variableClick: (variable)->
         @logic.command @commands.build_append_variable(variable: variable.value)
+      sinClick: ->
+        @logic.command @commands.build_append_sin()
+      cosClick: ->
+        @logic.command @commands.build_append_cos()
+      tanClick: ->
+        @logic.command @commands.build_append_tan()
+      arcsinClick: ->
+        @logic.command @commands.build_append_arcsin()
+      arccosClick: ->
+        @logic.command @commands.build_append_arccos()
+      arctanClick: ->
+        @logic.command @commands.build_append_arctan()
 
     class_mixer(_EquationBuilderButtonsLogic)
 
@@ -187,6 +208,7 @@ ttm.define 'equation_builder',
         @renderControlPanel()
         @renderDropdown()
         @renderNumberPanel()
+        @renderAdvancedPanel()
 
       renderDropdown: ->
         @extra_buttons = $("""
@@ -201,7 +223,8 @@ ttm.define 'equation_builder',
 
             <div class='advanced'>
               <div class='buttons'>
-                (STUFFF)
+                <div class='buttons-wrap'>
+                </div>
               </div>
               <div class='link-wrap'><a href='#' class='extra-buttons-handle'><span class='icon-caret-down'></span> Advanced</a></div>
             </div>
@@ -211,7 +234,9 @@ ttm.define 'equation_builder',
         @wrapper.append @extra_buttons
 
         @extra_buttons.find("a.extra-buttons-handle").on "click", ->
-          $(@).parent().parent().find(".buttons").slideToggle()
+          $(@).find("span").toggleClass 'icon-caret-down'
+          $(@).find("span").toggleClass 'icon-caret-up'
+          $(@).parent().parent().find(".buttons").slideToggle(400)
           false
 
       renderNumberPanel: ->
@@ -224,6 +249,18 @@ ttm.define 'equation_builder',
         @buttons.equals.render(element: number_panel)
 
         @extra_buttons.find(".numbers .buttons  .buttons-wrap").append number_panel
+
+
+      renderAdvancedPanel: ->
+        advanced_panel = $("<div class='advanced-panel'></div>")
+        @buttons.sin.render(element: advanced_panel)
+        @buttons.cos.render(element: advanced_panel)
+        @buttons.tan.render(element: advanced_panel)
+        @buttons.arcsin.render(element: advanced_panel)
+        @buttons.arccos.render(element: advanced_panel)
+        @buttons.arctan.render(element: advanced_panel)
+        @extra_buttons.find(".advanced .buttons  .buttons-wrap").append advanced_panel
+
 
       renderNumbers: (nums, element)->
         for num in nums
