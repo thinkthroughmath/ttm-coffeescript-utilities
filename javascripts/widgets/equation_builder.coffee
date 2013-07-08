@@ -131,8 +131,8 @@ ttm.define 'equation_builder',
         @exponent = @builder.exponent click: => @exponentClick()
 
         @square_root = @builder.root radicand: "x", click: => @square_rootClick()
-        @third_root = @builder.root degree: 3, radicand: "x", click: => @third_rootClick()
-        @nth_root = @builder.root degree: "x", radicand: "y", click: => @third_rootClick()
+        @third_root = @builder.root degree: 3, radicand: "x", click: => @square_rootClick()
+        @nth_root = @builder.root degree: "x", radicand: "y", click: => @square_rootClick()
 
         @lparen = @builder.lparen click: => @lparenClick()
         @rparen = @builder.rparen click: => @rparenClick()
