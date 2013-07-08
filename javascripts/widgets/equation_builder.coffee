@@ -116,16 +116,24 @@ ttm.define 'equation_builder',
       initialize: (@builder, @commands)->
         @numbers = @builder.base10Digits(click: (num)=> @numberClick(num))
         @decimal = @builder.decimal click: => @decimalClick()
-        @negative = @builder.negative click: => @negativeClick()
+        @negative_slash_positive = @builder.negative_slash_positive click: => @negativeClick()
+
         @addition = @builder.addition click: => @additionClick()
         @multiplication = @builder.multiplication click: => @multiplicationClick()
         @division = @builder.division click: => @divisionClick()
         @subtraction = @builder.subtraction click: => @subtractionClick()
         @equals = @builder.equals click: => @equalsClick()
         @clear = @builder.clear click: => @clearClick()
+
         @square = @builder.square click: => @squareClick()
-        @square_root = @builder.square_root click: => @square_rootClick()
+        @cube = @builder.square click: => @squareClick()
         @exponent = @builder.exponent click: => @exponentClick()
+        @exponent = @builder.exponent click: => @exponentClick()
+
+        @square_root = @builder.root radicand: "x", click: => @square_rootClick()
+        @third_root = @builder.root degree: 3, radicand: "x", click: => @third_rootClick()
+        @nth_root = @builder.root degree: "x", radicand: "y", click: => @third_rootClick()
+
         @lparen = @builder.lparen click: => @lparenClick()
         @rparen = @builder.rparen click: => @rparenClick()
         @pi = @builder.pi click: => @piClick()
@@ -138,12 +146,14 @@ ttm.define 'equation_builder',
         @arccos = @builder.fn value: "arccos", label: "arccos", click: => @arccosClick()
         @arctan = @builder.fn value: "arctan", label: "arctan", click: => @arctanClick()
 
+        @numerator_denominator = @builder.numerator_denominator click: => @numerator_denominatorClick()
 
       setLogic: ((@logic)->)
       variableButtons: (variables)->
         @variables = @builder.variables
           variables: variables,
           click: (variable)=> @variableClick(variable)
+
       piClick: ->
         @logic.command @commands.build_append_pi()
       rparenClick: ->
@@ -246,7 +256,6 @@ ttm.define 'equation_builder',
         @renderNumbers [1..3], number_panel
         @renderNumbers [0], number_panel
         @buttons.decimal.render(element: number_panel)
-        @buttons.equals.render(element: number_panel)
 
         @extra_buttons.find(".numbers .buttons  .buttons-wrap").append number_panel
 
@@ -312,18 +321,29 @@ ttm.define 'equation_builder',
         """)
         @element.append control_panel
         control_panel = control_panel.find('.controls-wrap')
-        @buttons.multiplication.render(element: control_panel)
-        @buttons.addition.render(element: control_panel)
-        @buttons.division.render(element: control_panel)
+
         @buttons.subtraction.render(element: control_panel)
-        @buttons.negative.render(element: control_panel)
-        @buttons.clear.render(element: control_panel)
+        @buttons.addition.render(element: control_panel)
+        @buttons.multiplication.render(element: control_panel)
+
+        @buttons.division.render(element: control_panel)
+        @buttons.negative_slash_positive.render(element: control_panel)
+        @buttons.numerator_denominator.render(element: control_panel)
+
         @buttons.square.render(element: control_panel)
-        @buttons.square_root.render(element: control_panel)
+        @buttons.cube.render(element: control_panel)
         @buttons.exponent.render(element: control_panel)
+
+        @buttons.square_root.render(element: control_panel)
+        @buttons.third_root.render(element: control_panel)
+        @buttons.nth_root.render(element: control_panel)
+
+        @buttons.pi.render(element: control_panel)
         @buttons.lparen.render(element: control_panel)
         @buttons.rparen.render(element: control_panel)
-        @buttons.pi.render(element: control_panel)
+
+        @buttons.clear.render(element: control_panel)
+        @buttons.equals.render(element: control_panel)
 
       renderVariablePanel: ->
         @variable_panel = $("""
