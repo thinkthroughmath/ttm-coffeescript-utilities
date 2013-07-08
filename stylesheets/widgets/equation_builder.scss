@@ -3,6 +3,7 @@
 
 @import "math_buttons";
 
+$scalar: 1.0;
 $scalar: 0.8;
 $cursor-color: #aaa;
 
@@ -20,7 +21,6 @@ div.equation-builder {
         width: 622px;
         overflow: hidden;
         padding-bottom: 10px;
-
 
         figure.equation-display {
             height: 45px;
@@ -222,6 +222,20 @@ div.equation-builder {
             }
         }
     }
+
+
+    button.number, button.operation, button.function, button.number-specifier {
+        @include math-button-gray;
+    }
+
+    button.variable {
+        @include math-button-orange;
+    }
+
+    button.clear, button.equals {
+        @include math-button-blue;
+    }
+
 }
 
 
