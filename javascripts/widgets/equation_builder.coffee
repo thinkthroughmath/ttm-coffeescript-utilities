@@ -147,7 +147,7 @@ ttm.define 'equation_builder',
         @arctan = @builder.fn name: "arctan", label: "arctan", click: => @arctanClick()
 
 
-        @numerator_denominator = @builder.numerator_denominator(click: => @numerator_denominatorClick())
+        @fraction = @builder.fraction(click: => @fractionClick())
 
       setLogic: ((@logic)->)
       variableButtons: (variables)->
@@ -197,8 +197,8 @@ ttm.define 'equation_builder',
         @logic.command @commands.build_append_fn(name: "arccos")
       arctanClick: ->
         @logic.command @commands.build_append_fn(name: "arctan")
-      numerator_denominatorClick: ->
-        @logic.command @commands.build_append_numerator_denominator()
+      fractionClick: ->
+        @logic.command @commands.build_append_fraction()
 
     class_mixer(_EquationBuilderButtonsLogic)
 
@@ -331,7 +331,7 @@ ttm.define 'equation_builder',
 
         @buttons.division.render(element: control_panel)
         @buttons.negative_slash_positive.render(element: control_panel)
-        @buttons.numerator_denominator.render(element: control_panel)
+        @buttons.fraction.render(element: control_panel)
 
         @buttons.square.render(element: control_panel)
         @buttons.cube.render(element: control_panel)
