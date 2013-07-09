@@ -158,7 +158,6 @@ ttm.define 'lib/math/expression_to_mathml_conversion',
               mathml
           });
 
-        refinement.forDefault({toMathML: -> debugger; throw "toMathML NOT DEFINED FOR #{@klass}"})
         @refinement = refinement
 
 
