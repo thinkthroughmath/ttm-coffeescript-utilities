@@ -40,6 +40,10 @@ class MathMLExponentiationHandler
 
 ttm.class_mixer(MathMLExponentiationHandler)
 
+class MathMLFractionHandler
+
+ttm.class_mixer(MathMLExponentiationHandler)
+
 class MathMLExpressionHandler
 
   @handle: (element, cursor_move_function, component_retriever, current_position)->
@@ -47,7 +51,6 @@ class MathMLExpressionHandler
     expressions.each (i, exp)=>
       @build($(exp) , cursor_move_function, component_retriever, current_position).attach()
   initialize: (@element, @cursor_move_function, @component_retriever, @current_position)->
-
 
   expressionEndIndicator: ->
     if @element.hasClass 'is-root'
@@ -67,6 +70,7 @@ class MathMLExpressionHandler
     expression_end_element.on "mouseenter mouseleave", ->
       expression_end_element.toggleClass('has-cursor-show-left')
       false
+
     expression_end_element.on "click", =>
       @cursor_move_function component_id, "inner"
       false
@@ -81,11 +85,11 @@ class EquationBuilderRenderedMathMLModifier
 
   afterUpdate: ()->
     current_position = @current_position_function()
-    MathMLExponentiationHandler.handle(@element,
-      @expression_position_selected_function,
-      @eq_comp_retriever,
-      current_position
-    )
+    # MathMLExponentiationHandler.handle(@element,
+    #   @expression_position_selected_function,
+    #   @eq_comp_retriever,
+    #   current_position
+    # )
 
     MathMLExpressionHandler.handle(
       @element,
@@ -93,10 +97,6 @@ class EquationBuilderRenderedMathMLModifier
       @eq_comp_retriever,
       current_position
     )
-
-
-
-
 
 ttm.class_mixer EquationBuilderRenderedMathMLModifier
 

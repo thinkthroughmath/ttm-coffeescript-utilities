@@ -138,15 +138,16 @@ ttm.define 'equation_builder',
         @rparen = @builder.rparen click: => @rparenClick()
         @pi = @builder.pi click: => @piClick()
 
-        @sin = @builder.fn value: "sin", label: "sin", click: => @sinClick()
-        @cos = @builder.fn value: "cos", label: "cos", click: => @cosClick()
-        @tan = @builder.fn value: "tan", label: "tan", click: => @tanClick()
+        @sin = @builder.fn name: "sin", label: "sin", click: => @sinClick()
+        @cos = @builder.fn name: "cos", label: "cos", click: => @cosClick()
+        @tan = @builder.fn name: "tan", label: "tan", click: => @tanClick()
 
-        @arcsin = @builder.fn value: "arcsin", label: "arcsin", click: => @arcsinClick()
-        @arccos = @builder.fn value: "arccos", label: "arccos", click: => @arccosClick()
-        @arctan = @builder.fn value: "arctan", label: "arctan", click: => @arctanClick()
+        @arcsin = @builder.fn name: "arcsin", label: "arcsin", click: => @arcsinClick()
+        @arccos = @builder.fn name: "arccos", label: "arccos", click: => @arccosClick()
+        @arctan = @builder.fn name: "arctan", label: "arctan", click: => @arctanClick()
 
-        @numerator_denominator = @builder.numerator_denominator click: => @numerator_denominatorClick()
+
+        @numerator_denominator = @builder.numerator_denominator(click: => @numerator_denominatorClick())
 
       setLogic: ((@logic)->)
       variableButtons: (variables)->
@@ -185,17 +186,19 @@ ttm.define 'equation_builder',
       variableClick: (variable)->
         @logic.command @commands.build_append_variable(variable: variable.value)
       sinClick: ->
-        @logic.command @commands.build_append_sin()
+        @logic.command @commands.build_append_fn(name: "sin")
       cosClick: ->
-        @logic.command @commands.build_append_cos()
+        @logic.command @commands.build_append_fn(name: "cos")
       tanClick: ->
-        @logic.command @commands.build_append_tan()
+        @logic.command @commands.build_append_fn(name: "tan")
       arcsinClick: ->
-        @logic.command @commands.build_append_arcsin()
+        @logic.command @commands.build_append_fn(name: "arcsin")
       arccosClick: ->
-        @logic.command @commands.build_append_arccos()
+        @logic.command @commands.build_append_fn(name: "arccos")
       arctanClick: ->
-        @logic.command @commands.build_append_arctan()
+        @logic.command @commands.build_append_fn(name: "arctan")
+      numerator_denominatorClick: ->
+        @logic.command @commands.build_append_numerator_denominator()
 
     class_mixer(_EquationBuilderButtonsLogic)
 

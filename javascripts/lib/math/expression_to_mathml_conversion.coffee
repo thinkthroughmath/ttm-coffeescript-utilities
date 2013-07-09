@@ -43,6 +43,24 @@ ttm.define 'lib/math/expression_to_mathml_conversion',
               exp_math_ml
           });
 
+        refinement.forType(@component_source.classes.fn
+          {
+            toMathML: (opts={})->
+              argument_opts = ttm.defaults {
+                classes: ['function-argument'],
+                part_of: 'function'
+              }, opts
+
+              argument = refinement.refine(@argument()).toMathML(argument_opts)
+              exp_math_ml = """
+                <mrow>
+                  <mi>#{@name()}</mi>
+                  #{argument}
+                </mrow>
+              """
+              exp_math_ml
+          })
+
         refinement.forType(@component_source.classes.expression,
           {
             toMathML: (opts={})->
@@ -116,8 +134,33 @@ ttm.define 'lib/math/expression_to_mathml_conversion',
 
           });
 
-        refinement.forDefault({toMathML: -> throw "toMathML NOT DEFINED FOR #{@klass}"})
+        refinement.forType(@component_source.classes.fraction,
+          {
+            toMathML: (opts={})->
+              numerator_opts = ttm.defaults {
+                classes: ['fraction-numerator'],
+                part_of: 'fraction'
+              }, opts
+              denominator_opts = ttm.defaults {
+                classes: ['fraction-denominator']
+                part_of: 'fraction'
+              }, opts
+
+              numerator_ml = refinement.refine(@numerator()).toMathML(numerator_opts);
+              denominator_ml = refinement.refine(@denominator()).toMathML(denominator_opts);
+
+              mathml = """
+                <mfrac>
+                  <mrow>#{numerator_ml}</mrow>
+                  <mrow>#{denominator_ml}</mrow>
+                </mfrac>
+              """
+              mathml
+          });
+
+        refinement.forDefault({toMathML: -> debugger; throw "toMathML NOT DEFINED FOR #{@klass}"})
         @refinement = refinement
+
 
       convert: (expression_position)->
         ret = @refinement.refine(expression_position.expression()).toMathML
@@ -144,8 +187,11 @@ ttm.define 'lib/math/expression_to_mathml_conversion',
         classes = ["expression-component-id-#{@expression.id()}",
           "expression-component-position-type-inner"].concat(@opts.classes || [])
 
-        if @opts.part_of != 'exponent'
-          classes = classes.concat(["expression"])
+
+        # forgot why this was here, leaving it in because i dont want to forget about it
+        # if @opts.part_of != 'exponent'
+        #   classes = classes.concat(["expression"])
+        classes = classes.concat(["expression"])
 
         if @expression.isOpen()
           ret = "<mrow #{@classes_str(classes)}><mo>(</mo>#{mathml}</mrow>"
