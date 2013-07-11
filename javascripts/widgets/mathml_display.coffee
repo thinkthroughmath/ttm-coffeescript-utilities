@@ -26,7 +26,9 @@ class MathMLDisplay
     @mathml_renderer.renderMathMLInElement(
       @wrappedMathTag(mathml)
       @figure
-      => @opts.after_update(@figure)
+      =>
+        @figure.scrollLeft(9999999)
+        @opts.after_update(@figure)
     )
 
 ttm.class_mixer(MathMLDisplay)
