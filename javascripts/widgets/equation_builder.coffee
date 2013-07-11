@@ -9,6 +9,7 @@
 #= require widgets/equation_builder_rendered_mathml_modifier
 #= require widgets/math_buttons
 
+
 ttm.define 'equation_builder',
   ["lib/class_mixer", "lib/math/buttons", 'lib/historic_value',
    'lib/math/expression_to_mathml_conversion'],
@@ -112,6 +113,7 @@ ttm.define 'equation_builder',
 
     class_mixer(_EquationBuilderLogic)
 
+    # TODO refactor all of these buttons into
     class _EquationBuilderButtonsLogic
       initialize: (@builder, @commands)->
         @numbers = @builder.base10Digits(click: (num)=> @numberClick(num))
@@ -125,14 +127,16 @@ ttm.define 'equation_builder',
         @equals = @builder.equals click: => @equalsClick()
         @clear = @builder.clear click: => @clearClick()
 
-        @square = @builder.square click: => @squareClick()
-        @cube = @builder.square click: => @squareClick()
-        @exponent = @builder.exponent click: => @exponentClick()
-        @exponent = @builder.exponent click: => @exponentClick()
+        @square = @builder.exponent value: "square", power: "2", click: => @squareClick()
+        @cube = @builder.exponent value: "cube", power: "3", click: => @cubeClick()
+        @exponent = @builder.exponent value: "exponentiate", click: => @exponentClick()
 
-        @square_root = @builder.root radicand: "x", click: => @square_rootClick()
-        @third_root = @builder.root degree: 3, radicand: "x", click: => @square_rootClick()
-        @nth_root = @builder.root degree: "x", radicand: "y", click: => @square_rootClick()
+
+
+        @square_root = @builder.root value: "square-root", radicand: "x", click: => @squareRootClick()
+        @cubed_root = @builder.root value: "cubed-root", degree: "3", radicand: "x", click: => @cubedRootClick()
+
+        @root = @builder.root degree: "x", radicand: "y", click: => @rootClick()
 
         @lparen = @builder.lparen click: => @lparenClick()
         @rparen = @builder.rparen click: => @rparenClick()
@@ -161,12 +165,18 @@ ttm.define 'equation_builder',
         @logic.command @commands.build_close_sub_expression()
       lparenClick: ->
         @logic.command @commands.build_append_open_sub_expression()
+      squareClick: ->
+        @logic.command @commands.build_append_exponentiation(power: 2)
+      cubeClick: ->
+        @logic.command @commands.build_append_exponentiation(power: 3)
       exponentClick: ->
         @logic.command @commands.build_append_exponentiation()
-      square_rootClick: ->
+      squareRootClick: ->
         @logic.command @commands.build_append_root(degree: 2)
-      squareClick: ->
-        @logic.command @commands.build_exponentiate_last(power: 2, power_closed: true)
+      cubedRootClick: ->
+        @logic.command @commands.build_append_root(degree: 3)
+      rootClick: ->
+        @logic.command @commands.build_append_root()
       decimalClick: ->
         @logic.command @commands.build_append_decimal()
       clearClick: ->
@@ -338,8 +348,8 @@ ttm.define 'equation_builder',
         @buttons.exponent.render(element: control_panel)
 
         @buttons.square_root.render(element: control_panel)
-        @buttons.third_root.render(element: control_panel)
-        @buttons.nth_root.render(element: control_panel)
+        @buttons.cubed_root.render(element: control_panel)
+        @buttons.root.render(element: control_panel)
 
         @buttons.pi.render(element: control_panel)
         @buttons.lparen.render(element: control_panel)
