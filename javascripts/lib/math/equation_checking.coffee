@@ -38,7 +38,12 @@ class EquationChecking
     @exp_traversal.build(@expression_position.expression()).hasEquals()
 
   hasUnknown: ->
-    false
+    unknown = _(@variables).find (it)->
+      it.isUnknown
+    if unknown
+      @exp_traversal.build(@expression_position.expression()).hasVariableNamed(unknown.name)
+    else
+      false
 
   asJSON: ->
     EquationCheckingJSON.build(@).toJSON()
