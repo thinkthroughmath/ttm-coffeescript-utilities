@@ -92,7 +92,8 @@ ttm.define 'equation_builder',
         checked_json = @math_lib.equation_checking.build(
           @expression_position_value.current(),
           @variables).asJSON()
-        @checkCorrectCallback(checked_json)
+        math_ml = "<math>#{@mathML()}</math>"
+        @checkCorrectCallback(checked_json, math_ml)
 
       clear: ->
         @logic.command @expression_manipulation_source.build_reset()

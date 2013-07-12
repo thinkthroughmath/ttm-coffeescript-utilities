@@ -1,11 +1,10 @@
 #= require ./base
 #= require lib
 
-
-
 class EquationChecking
   initialize: (@manip_source, @exp_traversal, @evaluation, @expression_equality_fn,
-    @expression_position, @variables)->
+    @expression_position,
+    @variables)->
 
   ensureChecked: ->
     unless @is_checked
