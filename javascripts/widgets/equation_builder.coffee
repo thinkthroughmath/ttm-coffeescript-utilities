@@ -53,6 +53,7 @@ ttm.define 'equation_builder',
           after_update: ->
             mathml_display_modifier.afterUpdate.apply(mathml_display_modifier, arguments)
 
+
         @layout = _EquationBuilderLayout.build(
           display,
           @buttons)
@@ -93,6 +94,13 @@ ttm.define 'equation_builder',
           @variables).asJSON()
         @checkCorrectCallback(checked_json)
 
+      clear: ->
+        @logic.command @expression_manipulation_source.build_reset()
+
+      onMathMLChange: (cb)->
+        @logic.onMathMLChange cb
+
+
     class_mixer(EquationBuilder)
 
     class _EquationBuilderLogic
@@ -106,10 +114,13 @@ ttm.define 'equation_builder',
 
       updateDisplay: ->
         mathml = @mathML()
+        @mathMLChangeHook && @mathMLChangeHook(mathml)
         @display.update(mathml)
 
       mathML: ->
         @mathml_converter.convert(@expression_position.current())
+
+      onMathMLChange: (@mathMLChangeHook)->
 
     class_mixer(_EquationBuilderLogic)
 
