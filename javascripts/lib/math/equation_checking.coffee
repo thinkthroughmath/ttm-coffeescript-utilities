@@ -1,6 +1,8 @@
 #= require ./base
 #= require lib
 
+
+
 class EquationChecking
   initialize: (@manip_source, @exp_traversal, @evaluation, @expression_equality_fn,
     @expression_position, @variables)->
@@ -11,9 +13,7 @@ class EquationChecking
 
   isCorrect: ->
     unless @correct_val
-
       if @hasEqualsSign()
-
         @replaced = @manip_source.build_substitute_variables(variables: @variables)
           .perform(@expression_position)
 
@@ -39,7 +39,7 @@ class EquationChecking
 
   hasUnknown: ->
     unknown = _(@variables).find (it)->
-      it.isUnknown
+      it.is_unknown
     if unknown
       @exp_traversal.build(@expression_position.expression()).hasVariableNamed(unknown.name)
     else
