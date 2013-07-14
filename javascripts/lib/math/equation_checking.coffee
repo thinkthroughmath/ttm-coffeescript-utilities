@@ -26,7 +26,8 @@ class EquationChecking
   leftValue: (exp)->
     left_hand_side = @manip_source.build_get_left_side().perform(exp)
     left_hand_exp = left_hand_side.expression()
-    left_hand_side.clone(expression: @evaluation.build(left_hand_exp).resultingExpression())
+    evaled = @evaluation.build(left_hand_exp).resultingExpression()
+    left_hand_side.clone(expression: evaled)
 
   rightValue: (exp)->
     right_hand_side = @manip_source.build_get_right_side().perform(exp)

@@ -118,7 +118,7 @@ ttm.define 'lib/math/expression_to_mathml_conversion',
               degree = @degree()
               if degree.size() == 1
                 first = @degree().first()
-                first instanceof component_source.classes.number and first.value() == 2
+                first instanceof component_source.classes.number and first.value() == "2"
               else
                 false
 
