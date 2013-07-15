@@ -11,9 +11,13 @@
 
 
 ttm.define 'equation_builder',
-  ["lib/class_mixer", "lib/math/buttons", 'lib/historic_value',
+  ["lib/class_mixer", 'lib/historic_value',
    'lib/math/expression_to_mathml_conversion'],
-  ( class_mixer, math_buttons, historic_value, mathml_converter_builder)->
+  ( class_mixer, historic_value, mathml_converter_builder)->
+
+    ui_elements = window.ttm.widgets.UIElements.build()
+    math_buttons = window.ttm.widgets.ButtonBuilder.build(ui_elements: ui_elements)
+
     class EquationBuilder
       initialize: (opts={})->
         @element = opts.element
@@ -22,7 +26,7 @@ ttm.define 'equation_builder',
         # save the equation builder onto the dom element for external messaging
         opts.element[0].equation_builder = @
 
-        math_button_builder = math_buttons.makeBuilder()
+        math_button_builder = math_buttons
 
         @math_lib = ttm.lib.math.math_lib.build()
 
@@ -138,7 +142,7 @@ ttm.define 'equation_builder',
         @subtraction = @builder.subtraction click: => @subtractionClick()
         @equals = @builder.equals click: => @equalsClick()
         @clear = @builder.clear click: => @clearClick()
-
+        @del = @builder.del click: => @delClick()
         @square = @builder.exponent value: "square", power: "2", click: => @squareClick()
         @cube = @builder.exponent value: "cube", power: "3", click: => @cubeClick()
         @exponent = @builder.exponent value: "exponentiate", click: => @exponentClick()
@@ -171,6 +175,8 @@ ttm.define 'equation_builder',
           variables: variables,
           click: (variable)=> @variableClick(variable)
 
+      delClick: ->
+        @logic.command @commands.build_remove_pointed_at()
       piClick: ->
         @logic.command @commands.build_append_pi()
       rparenClick: ->
@@ -369,6 +375,7 @@ ttm.define 'equation_builder',
 
         @buttons.clear.render(element: control_panel)
         @buttons.equals.render(element: control_panel)
+        @buttons.del.render(element: control_panel)
 
       renderVariablePanel: ->
         @variable_panel = $("""
