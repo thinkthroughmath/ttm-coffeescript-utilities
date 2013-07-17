@@ -85,11 +85,6 @@ class EquationBuilderRenderedMathMLModifier
 
   afterUpdate: ()->
     current_position = @current_position_function()
-    # MathMLExponentiationHandler.handle(@element,
-    #   @expression_position_selected_function,
-    #   @eq_comp_retriever,
-    #   current_position
-    # )
 
     MathMLExpressionHandler.handle(
       @element,

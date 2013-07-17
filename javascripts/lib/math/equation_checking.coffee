@@ -35,13 +35,13 @@ class EquationChecking
     right_hand_side.clone(expression: @evaluation.build(right_hand_exp).resultingExpression())
 
   hasEqualsSign: ->
-    @exp_traversal.build(@expression_position.expression()).hasEquals()
+    @exp_traversal.build(@expression_position).hasEquals()
 
   hasUnknown: ->
     unknown = _(@variables).find (it)->
       it.is_unknown
     if unknown
-      @exp_traversal.build(@expression_position.expression()).hasVariableNamed(unknown.name)
+      @exp_traversal.build(@expression_position).hasVariableNamed(unknown.name)
     else
       false
 

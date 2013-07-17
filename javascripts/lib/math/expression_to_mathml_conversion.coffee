@@ -186,15 +186,7 @@ ttm.define 'lib/math/expression_to_mathml_conversion',
         classes = ["expression-component-id-#{@expression.id()}",
           "expression-component-position-type-inner"].concat(@opts.classes || [])
 
-
-        # forgot why this was here, leaving it in because i dont want to forget about it
-        # if @opts.part_of != 'exponent'
-        #   classes = classes.concat(["expression"])
-        classes = classes.concat(["expression"])
-
-        if @expression.isOpen()
-          ret = "<mrow #{@classes_str(classes)}><mo>(</mo>#{mathml}</mrow>"
-        else if @opts.is_root
+        if @opts.is_root
           classes.push 'is-root'
           ret = "<mrow #{@classes_str(classes)}>#{mathml}#{@possibleCursorSpace()}</mrow>"
         else

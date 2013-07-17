@@ -180,9 +180,9 @@ ttm.define 'equation_builder',
       piClick: ->
         @logic.command @commands.build_append_pi()
       rparenClick: ->
-        @logic.command @commands.build_close_sub_expression()
+        @logic.command @commands.build_exit_sub_expression()
       lparenClick: ->
-        @logic.command @commands.build_append_open_sub_expression()
+        @logic.command @commands.build_append_sub_expression()
       squareClick: ->
         @logic.command @commands.build_append_exponentiation(power: 2)
       cubeClick: ->
