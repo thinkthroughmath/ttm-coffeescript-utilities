@@ -186,6 +186,8 @@ ttm.define 'lib/math/expression_to_mathml_conversion',
         classes = ["expression-component-id-#{@expression.id()}",
           "expression-component-position-type-inner"].concat(@opts.classes || [])
 
+        classes.push "expression"
+
         if @opts.is_root
           classes.push 'is-root'
           ret = "<mrow #{@classes_str(classes)}>#{mathml}#{@possibleCursorSpace()}</mrow>"

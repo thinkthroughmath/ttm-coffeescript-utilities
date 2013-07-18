@@ -227,6 +227,8 @@ ttm.define 'equation_builder',
         @logic.command @commands.build_append_fn(name: "arctan")
       fractionClick: ->
         @logic.command @commands.build_append_fraction()
+      negativeClick: ->
+        @logic.command @commands.build_negate_last()
 
     class_mixer(_EquationBuilderButtonsLogic)
 
@@ -393,8 +395,8 @@ ttm.define 'equation_builder',
     class EquationComponentRetriever
       initialize: (@exp_pos_val, @traversal_builder)->
       findForID: (id)->
-        exp = @exp_pos_val.current().expression()
-        @traversal_builder.build(exp).findForID(id)
+        exp_pos = @exp_pos_val.current()
+        @traversal_builder.build(exp_pos).findForID(id)
 
     class_mixer(EquationComponentRetriever)
 

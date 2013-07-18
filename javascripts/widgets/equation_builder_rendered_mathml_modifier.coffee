@@ -22,28 +22,6 @@ class MathMLCursorBlinkEmulator
 ttm.class_mixer(MathMLCursorBlinkEmulator)
 
 
-class MathMLExponentiationHandler
-  @handle: (element, cursor_move_function, component_retriever, current_position)->
-    exponentiations = element.find(".msup") # mathml exponentiation w/ msup
-    exponentiations.each (i, exp)=>
-      @build($(exp) , cursor_move_function, component_retriever, current_position).start()
-
-  initialize: (@element, @cursor_move_function, @component_retriever, @current_position)->
-  start: ->
-    base = @element.find(".exponentiation-base").first()
-    power = @element.find(".exponentiation-power").first()
-
-    MathMLExpressionHandler.build(base, @cursor_move_function, @component_retriever, @current_position).
-      attach insertable_cursor: true
-    MathMLExpressionHandler.build(power, @cursor_move_function, @component_retriever, @current_position).
-      attach insertable_cursor: true
-
-ttm.class_mixer(MathMLExponentiationHandler)
-
-class MathMLFractionHandler
-
-ttm.class_mixer(MathMLExponentiationHandler)
-
 class MathMLExpressionHandler
 
   @handle: (element, cursor_move_function, component_retriever, current_position)->
