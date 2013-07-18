@@ -21,7 +21,6 @@ div.equation-builder {
         overflow: hidden;
         padding-bottom: 10px;
 
-
         .usage-activator {
             position: absolute;
             bottom: 0;
@@ -93,7 +92,6 @@ div.equation-builder {
 
 
         @include math-button-sizing($scalar);
-
         button.math-button.equal {
             width: 85px;
         }
