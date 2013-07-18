@@ -254,6 +254,17 @@ ttm.define 'equation_builder',
         @renderAdvancedPanel()
 
       renderDropdown: ->
+        advanced_html = """
+            <div class='advanced'>
+              <div class='buttons'>
+                <div class='buttons-wrap'>
+                </div>
+              </div>
+              <div class='link-wrap'><a href='#' class='extra-buttons-handle'><span class='icon-caret-down'></span> Advanced</a></div>
+            </div>
+        """
+        advanced_html = "" # advanced are currently disabled
+
         @extra_buttons = $("""
           <div class='equation-builder-extra-buttons'>
             <div class='numbers'>
@@ -263,14 +274,7 @@ ttm.define 'equation_builder',
               </div>
               <div class='link-wrap'><a href='#' class='extra-buttons-handle'><span class='icon-caret-down'></span> Numbers</a></div>
             </div>
-
-            <div class='advanced'>
-              <div class='buttons'>
-                <div class='buttons-wrap'>
-                </div>
-              </div>
-              <div class='link-wrap'><a href='#' class='extra-buttons-handle'><span class='icon-caret-down'></span> Advanced</a></div>
-            </div>
+            #{advanced_html}
           </div>
         """)
 
@@ -294,6 +298,7 @@ ttm.define 'equation_builder',
 
 
       renderAdvancedPanel: ->
+        return # we aren't doing this for now, disabled!
         advanced_panel = $("<div class='advanced-panel'></div>")
         @buttons.sin.render(element: advanced_panel)
         @buttons.cos.render(element: advanced_panel)
