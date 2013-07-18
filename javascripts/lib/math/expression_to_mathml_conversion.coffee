@@ -164,7 +164,7 @@ ttm.define 'lib/math/expression_to_mathml_conversion',
       convert: (expression_position)->
         ret = @refinement.refine(expression_position.expression()).toMathML
           position: expression_position
-          is_root: true
+          is_root_expression: true
         ret
 
     class_mixer ExpressionToMathMLConversion
@@ -173,7 +173,7 @@ ttm.define 'lib/math/expression_to_mathml_conversion',
       initialize: (@expression, @refinement)->
       toMathML: (@opts={})->
         expression_position = @opts.position
-        elem_mathml = @elementsMathML(_.extend({}, @opts, {is_root: false}))
+        elem_mathml = @elementsMathML(_.extend({}, @opts, {is_root_expression: false}))
         @wrapInTags(elem_mathml, expression_position)
 
       elementsMathML: (opts)->
@@ -188,7 +188,7 @@ ttm.define 'lib/math/expression_to_mathml_conversion',
 
         classes.push "expression"
 
-        if @opts.is_root
+        if @opts.is_root_expression
           classes.push 'is-root'
           ret = "<mrow #{@classes_str(classes)}>#{mathml}#{@possibleCursorSpace()}</mrow>"
         else
@@ -207,7 +207,7 @@ ttm.define 'lib/math/expression_to_mathml_conversion',
 
 
       shouldShowParentheses: ->
-        not @opts.is_root
+        not @opts.is_root_expression
 
       classes_str: (classes)->
         str = _(classes).join(' ')
