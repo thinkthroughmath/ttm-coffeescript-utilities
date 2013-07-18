@@ -22,7 +22,7 @@ div.equation-builder {
         overflow: hidden;
         padding-bottom: 10px;
 
-        figure.equation-display {
+        figure.mathml-display.equation-display {
             margin: auto;
             margin-bottom: 14px;
             margin-top: 10px;
@@ -30,6 +30,7 @@ div.equation-builder {
             overflow-y: hidden;
             white-space: nowrap;
             width: 95%;
+            font-size: 1.3em;
         }
 
         // sizing, margins, positioning
@@ -72,6 +73,15 @@ div.equation-builder {
         }
 
         @include math-button-sizing($scalar);
+        button.math-button.equal {
+            width: 58%;
+        }
+        button.math-button.clear {
+            width: 89%;
+        }
+        button.math-button.del {
+            font-size: 1.2em;
+        }
     }
 
 

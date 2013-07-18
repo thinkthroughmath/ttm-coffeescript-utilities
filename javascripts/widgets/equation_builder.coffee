@@ -380,9 +380,9 @@ ttm.define 'equation_builder',
         @buttons.lparen.render(element: control_panel)
         @buttons.rparen.render(element: control_panel)
 
-        @buttons.clear.render(element: control_panel)
-        @buttons.equals.render(element: control_panel)
         @buttons.del.render(element: control_panel)
+        @buttons.equals.render(element: control_panel)
+        @buttons.clear.render(element: control_panel)
 
       renderVariablePanel: ->
         @variable_panel = $("""
