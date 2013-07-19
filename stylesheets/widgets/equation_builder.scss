@@ -39,7 +39,9 @@ div.equation-builder {
             white-space: nowrap;
             width: 95%;
             font-size: 1.3em;
-            min-height: 50px
+            .ie & {
+                min-height: 50px;
+            }
         }
 
         // sizing, margins, positioning
@@ -133,7 +135,7 @@ div.equation-builder {
             }
         }
 
-        div.number-panel,  {
+        div.number-panel {
             text-align: left;
             position: relative;
             right: -4px;
