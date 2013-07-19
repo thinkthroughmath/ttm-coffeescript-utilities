@@ -261,7 +261,7 @@ ttm.define 'equation_builder',
                 <div class='buttons-wrap'>
                 </div>
               </div>
-              <div class='link-wrap'><a href='#' class='extra-buttons-handle'><span class='icon-caret-down'></span> Advanced</a></div>
+              <div class='link-wrap'><a href='#' class='extra-buttons-handle'><i class='icon-caret-down'></i> Advanced</a></div>
             </div>
         """
         advanced_html = "" # advanced are currently disabled
@@ -273,7 +273,7 @@ ttm.define 'equation_builder',
                 <div class='buttons-wrap'>
                 </div>
               </div>
-              <div class='link-wrap'><a href='#' class='extra-buttons-handle'><span class='icon-caret-down'></span> Numbers</a></div>
+              <div class='link-wrap'><a href='#' class='extra-buttons-handle'><i class='icon-caret-down'></i> Numbers</a></div>
             </div>
             #{advanced_html}
           </div>
@@ -282,8 +282,8 @@ ttm.define 'equation_builder',
         @wrapper.append @extra_buttons
 
         @extra_buttons.find("a.extra-buttons-handle").on "click", ->
-          $(@).find("span").toggleClass 'icon-caret-down'
-          $(@).find("span").toggleClass 'icon-caret-up'
+          $(@).find("i").toggleClass 'icon-caret-down'
+          $(@).find("i").toggleClass 'icon-caret-up'
           $(@).parent().parent().find(".buttons").slideToggle(400)
           false
 
