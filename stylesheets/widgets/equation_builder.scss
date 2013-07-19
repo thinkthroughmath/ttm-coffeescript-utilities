@@ -31,6 +31,11 @@ div.equation-builder {
             white-space: nowrap;
             width: 95%;
             font-size: 1.3em;
+
+            .ie & {
+                min-height: 50px;
+            }
+
         }
 
         // sizing, margins, positioning
@@ -115,13 +120,14 @@ div.equation-builder {
             }
         }
 
-        div.number-panel,  {
+        div.number-panel {
             text-align: left;
             position: relative;
             right: -4px;
 
             @include math-button-sizing($scalar);
         }
+
         div.advanced-panel {
             text-align: center;
             @include math-button-sizing($scalar);
