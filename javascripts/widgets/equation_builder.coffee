@@ -147,12 +147,13 @@ ttm.define 'equation_builder',
         @cube = @builder.exponent value: "cube", power: "3", click: => @cubeClick()
         @exponent = @builder.exponent value: "exponentiate", click: => @exponentClick()
 
+        math_var = (name)->
+          "<span class='math-variable'>#{name}</span>"
 
+        @square_root = @builder.root value: "square-root", radicand: math_var('x'), click: => @squareRootClick()
+        @cubed_root = @builder.root value: "cubed-root", degree: "3", radicand: math_var('x'), click: => @cubedRootClick()
 
-        @square_root = @builder.root value: "square-root", radicand: "x", click: => @squareRootClick()
-        @cubed_root = @builder.root value: "cubed-root", degree: "3", radicand: "x", click: => @cubedRootClick()
-
-        @root = @builder.root degree: "x", radicand: "y", click: => @rootClick()
+        @root = @builder.root degree: math_var('x'), radicand: math_var('y'), click: => @rootClick()
 
         @lparen = @builder.lparen click: => @lparenClick()
         @rparen = @builder.rparen click: => @rparenClick()
