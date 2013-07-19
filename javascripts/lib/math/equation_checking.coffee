@@ -18,10 +18,19 @@ class EquationChecking
 
         left_value = @leftValue(@replaced)
         right_value = @rightValue(@replaced)
-        @correct_val = @expression_equality_fn(left_value.expression(), right_value.expression())
+        sides_equal = @expression_equality_fn(left_value.expression(), right_value.expression())
+        @correct_val = @usesAllVariables() && sides_equal
       else
         @correct_val = false
     @correct_val
+
+  usesAllVariables: ->
+    uses_all = true
+    for v in @variables
+      if !@exp_traversal.build(@expression_position).hasVariableNamed(v.name)
+        uses_all = false
+        break
+    uses_all
 
   leftValue: (exp)->
     left_hand_side = @manip_source.build_get_left_side().perform(exp)
