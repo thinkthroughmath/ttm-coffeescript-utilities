@@ -10,6 +10,12 @@
 #= require widgets/math_buttons
 
 
+
+copy = {}
+copy.above_table = "Use the table as a guide."
+copy.above_controls = "Use each description and the calculator to build a word equation that represents the problem."
+
+
 ttm.define 'equation_builder',
   ["lib/class_mixer", 'lib/historic_value',
    'lib/math/expression_to_mathml_conversion'],
@@ -238,7 +244,8 @@ ttm.define 'equation_builder',
       render: (@parent)->
         elt = $("""
           <div class='equation-builder'>
-            <div class='equation-builder-main'></div>
+            <div class='equation-builder-main'>
+            </div>
           </div>
         """)
         @wrapper = elt
@@ -248,11 +255,36 @@ ttm.define 'equation_builder',
         @display.render(class: "equation-display", element: @element)
 
         @renderExplanatoryTable()
-        @renderVariablePanel()
-        @renderControlPanel()
+        @renderComponentPanel()
         @renderDropdown()
         @renderNumberPanel()
         @renderAdvancedPanel()
+        @renderUsageActivator()
+
+
+      renderUsageActivator: ->
+        usage_activator = $("""
+          <div class='usage-activator'>
+            <a href='#'>'How To' Instructions</a>
+          </div>
+        """)
+        usage_activator.find('a').on "click", =>
+          @showUsageDialog()
+          false
+        @element.append(usage_activator)
+
+      showUsageDialog: ->
+        $("""
+        <div class='equation-builder-usage-dialog'>
+          <ul>
+            <li>Click the descriptions and calculator buttons to build a word equation.</li>
+              <blockquote>
+                Example: red cars + blue cars = total cars
+              </blockquote>
+            <li>If you do not have a description for a number you need, click the NUMBERS tab under the calculator.</li>
+            <li>Click CLEAR to start a new equation.</li>
+          </ul>
+        </div> """).dialog({width: 500, height: 300, title: "Equation Builder Instructions"})
 
       renderDropdown: ->
         advanced_html = """
@@ -320,7 +352,7 @@ ttm.define 'equation_builder',
       renderExplanatoryTable: ->
         @explanatory_table = $("""
           <div class='explanatory-table'>
-            <p>Use this table as a guide</p>
+            <p>#{copy.above_table}</p>
             <table>
               <thead>
                 <tr>
@@ -353,16 +385,12 @@ ttm.define 'equation_builder',
         for v in @variables
           tbody.append(explanatoryTableRow(v))
 
-      renderControlPanel: ->
+      renderControlPanel: (parent)->
         control_panel = $("""
           <div class='control-panel'>
-            <p>Use these to show the relationship between values.</p>
-            <div class='controls-wrap'>
-            </div>
           </div>
         """)
-        @element.append control_panel
-        control_panel = control_panel.find('.controls-wrap')
+        parent.append control_panel
 
         @buttons.subtraction.render(element: control_panel)
         @buttons.addition.render(element: control_panel)
@@ -388,12 +416,21 @@ ttm.define 'equation_builder',
         @buttons.equals.render(element: control_panel)
         @buttons.clear.render(element: control_panel)
 
-      renderVariablePanel: ->
+      renderComponentPanel: ->
+        @component_panel = $("""
+          <div class='component-panel'>
+            <p>#{copy.above_controls}</p>
+          </div>""")
+        @element.append(@component_panel)
+
+        @renderVariablePanel(@component_panel)
+        @renderControlPanel(@component_panel)
+
+      renderVariablePanel: (parent)->
         @variable_panel = $("""
           <div class='variable-panel'>
-            <p>Use these as values for the equation</p>
           </div>""")
-        @element.append(@variable_panel)
+        parent.append(@variable_panel)
 
       renderVariablesInPanel: (@variable_buttons)->
         for v in @variable_buttons

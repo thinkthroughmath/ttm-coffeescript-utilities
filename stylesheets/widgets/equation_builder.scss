@@ -21,6 +21,16 @@ div.equation-builder {
         overflow: hidden;
         padding-bottom: 10px;
 
+
+        .usage-activator {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            color: white;
+            padding-bottom: 10px;
+            padding-left: 10px;
+        }
+
         figure.mathml-display.equation-display {
             margin: auto;
             margin-bottom: 14px;
@@ -41,7 +51,7 @@ div.equation-builder {
             font-size: 0.9em;
         }
 
-        div.explanatory-table, div.variable-panel, div.control-panel
+        div.explanatory-table, div.component-panel, div.variable-panel, div.control-panel
         {
             float: left;
             margin-left: $margin;
@@ -54,32 +64,41 @@ div.equation-builder {
             }
         }
 
-        div.variable-panel
-        {
-            width: 24%;
-            button {
-                width: 100%;
-                clear: both;
-                min-height: 43px;
-                height: auto;
+        div.component-panel{
+            width: 53%;
+
+            p {
+                margin-left: 10px;
             }
+
+            div.variable-panel
+            {
+                width: 46%;
+                button {
+                    width: 100%;
+                    clear: both;
+                    min-height: 43px;
+                    height: auto;
+                }
+            }
+
+            div.control-panel
+            {
+                margin-left: 25px;
+                width: 41%;
+            }
+
+
         }
 
-        div.control-panel
-        {
-            width: 26%;
-            .controls-wrap {
-                width: 90%;
-            }
-        }
 
         @include math-button-sizing($scalar);
 
         button.math-button.equal {
-            width: 58%;
+            width: 85px;
         }
         button.math-button.clear {
-            width: 89%;
+            width: 130px;
             font-size: 20px * $scalar !important;
         }
         button.math-button.del {
@@ -254,6 +273,24 @@ div.equation-builder {
         @include math-button-blue;
     }
 
+
+    .usage-activator  a {
+        color: white;
+    }
+}
+
+div.equation-builder-usage-dialog
+{
+    ul {
+        margin: 10px;
+        li {
+            margin-bottom: 15px;
+        }
+    }
+    blockquote {
+        background-color: #ddd;
+        padding: 10px;
+    }
 }
 
 
