@@ -305,7 +305,10 @@ ttm.define 'equation_builder',
                 <div class='buttons-wrap'>
                 </div>
               </div>
-              <div class='link-wrap'><a href='#' class='extra-buttons-handle'><i class='icon-caret-down'></i> Numbers</a></div>
+              <div class='link-wrap'><a href='#' class='extra-buttons-handle'>
+                <img src='/assets/arrow_down.png' class='arrow-down'>
+                <img src='/assets/arrow_up.png' class='arrow-up'>
+              Numbers</a></div>
             </div>
             #{advanced_html}
           </div>
@@ -314,8 +317,8 @@ ttm.define 'equation_builder',
         @wrapper.find(".arrow-up").hide()
 
         @extra_buttons.find("a.extra-buttons-handle").on "click", ->
-          $(@).find("i").toggleClass 'icon-caret-down'
-          $(@).find("i").toggleClass 'icon-caret-up'
+          $(@).find(".arrow-down").toggle()
+          $(@).find(".arrow-up").toggle()
           $(@).parent().parent().find(".buttons").slideToggle(400)
           false
 
