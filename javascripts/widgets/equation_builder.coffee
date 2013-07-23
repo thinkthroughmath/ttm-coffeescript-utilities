@@ -28,7 +28,7 @@ ttm.define 'equation_builder',
       initialize: (opts={})->
         @element = opts.element
         @checkCorrectCallback = opts.check_correct_callback
-        @image_assets = opts.image_assets
+        @image_assets = opts.image_assets || {}
 
         # save the equation builder onto the dom element for external messaging
         opts.element[0].equation_builder = @
@@ -242,7 +242,7 @@ ttm.define 'equation_builder',
     class_mixer(_EquationBuilderButtonsLogic)
 
     class _EquationBuilderLayout
-      initialize: (@display, @buttons, @image_assets)->
+      initialize: (@display, @buttons, @image_assets={})->
       render: (@parent)->
         elt = $("""
           <div class='equation-builder'>
