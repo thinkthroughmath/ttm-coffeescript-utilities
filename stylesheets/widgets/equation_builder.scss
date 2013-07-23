@@ -39,7 +39,7 @@ div.equation-builder {
             white-space: nowrap;
             width: 95%;
             font-size: 1.3em;
-            min-height: 50px
+            min-height: 35px;
         }
 
         // sizing, margins, positioning
@@ -68,6 +68,7 @@ div.equation-builder {
 
             p {
                 margin-left: 10px;
+                width: 90%;
             }
 
             div.variable-panel
@@ -273,8 +274,12 @@ div.equation-builder {
     }
 
 
-    .usage-activator  a {
+    .usage-activator a {
         color: white;
+        img.info-icon {
+            display: inline-block;
+            margin-right: 10px;
+        }
     }
 }
 

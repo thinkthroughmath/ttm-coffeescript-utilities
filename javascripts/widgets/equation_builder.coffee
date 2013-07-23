@@ -28,6 +28,7 @@ ttm.define 'equation_builder',
       initialize: (opts={})->
         @element = opts.element
         @checkCorrectCallback = opts.check_correct_callback
+        @image_assets = opts.image_assets
 
         # save the equation builder onto the dom element for external messaging
         opts.element[0].equation_builder = @
@@ -66,7 +67,8 @@ ttm.define 'equation_builder',
 
         @layout = _EquationBuilderLayout.build(
           display,
-          @buttons)
+          @buttons,
+          @image_assets)
 
         @layout.render(opts.element)
 
@@ -240,7 +242,7 @@ ttm.define 'equation_builder',
     class_mixer(_EquationBuilderButtonsLogic)
 
     class _EquationBuilderLayout
-      initialize: (@display, @buttons)->
+      initialize: (@display, @buttons, @image_assets)->
       render: (@parent)->
         elt = $("""
           <div class='equation-builder'>
@@ -265,7 +267,7 @@ ttm.define 'equation_builder',
       renderUsageActivator: ->
         usage_activator = $("""
           <div class='usage-activator'>
-            <a href='#'>'How To' Instructions</a>
+            <a href='#'><img src='#{@image_assets.info_icon}' class='info-icon'>'How To' Instructions</a>
           </div>
         """)
         usage_activator.find('a').on "click", =>
@@ -306,8 +308,8 @@ ttm.define 'equation_builder',
                 </div>
               </div>
               <div class='link-wrap'><a href='#' class='extra-buttons-handle'>
-                <img src='/assets/arrow_down.png' class='arrow-down'>
-                <img src='/assets/arrow_up.png' class='arrow-up'>
+                <img src='#{@image_assets.arrow_down}' class='arrow-down'>
+                <img src='#{@image_assets.arrow_up}' class='arrow-up'>
               Numbers</a></div>
             </div>
             #{advanced_html}
