@@ -153,7 +153,11 @@ ttm.define 'equation_builder',
         @del = @builder.del click: => @delClick()
         @square = @builder.exponent value: "square", power: "2", click: => @squareClick()
         @cube = @builder.exponent value: "cube", power: "3", click: => @cubeClick()
-        @exponent = @builder.exponent value: "exponentiate", click: => @exponentClick()
+        math_var = (name)->
+          "<span class='math-variable'>#{name}</span>"
+        base = math_var('y')
+        power = math_var('x')
+        @exponent = @builder.exponent value: "exponentiate", base: base, power: power, click: => @exponentClick()
 
         math_var = (name)->
           "<span class='math-variable'>#{name}</span>"
@@ -267,8 +271,7 @@ ttm.define 'equation_builder',
       renderUsageActivator: ->
         usage_activator = $("""
           <div class='usage-activator'>
-            <a href='#'><img src='#{@image_assets.info_icon}' class='info-icon'>'How To' Instructions</a>
-          </div>
+            <a href='#'><img src='#{@image_assets.info_icon}' class='info-icon'>How do I use this?</a></div>
         """)
         usage_activator.find('a').on "click", =>
           @showUsageDialog()

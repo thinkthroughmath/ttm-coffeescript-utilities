@@ -40,6 +40,7 @@ div.equation-builder {
             width: 95%;
             font-size: 1.3em;
             min-height: 35px;
+            padding-top: 10px;
         }
 
         // sizing, margins, positioning
@@ -104,7 +105,12 @@ div.equation-builder {
         button.math-button.del {
             font-size: 1.1em;
         }
+
+        button.math-button.negative-slash-positive {
+            font-size: 15px;
+        }
     }
+
 
 
     div.equation-builder-extra-buttons {
