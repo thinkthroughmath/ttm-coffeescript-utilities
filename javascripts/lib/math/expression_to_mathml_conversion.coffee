@@ -20,7 +20,7 @@ ttm.define 'lib/math/expression_to_mathml_conversion',
         refinement.forType(@component_source.classes.number,
           {
             toMathML: ->
-              "<mn>#{@value()}</mn>"
+              "<mn>#{@toDisplay()}</mn>"
           })
 
         refinement.forType(@component_source.classes.exponentiation,
