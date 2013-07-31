@@ -127,7 +127,8 @@ ttm.define 'equation_builder',
 
       updateDisplay: ->
         mathml = @mathML()
-        @mathMLChangeHook && @mathMLChangeHook(mathml)
+        try
+          @mathMLChangeHook && @mathMLChangeHook(mathml)
         @display.update(mathml)
 
       mathML: ->
