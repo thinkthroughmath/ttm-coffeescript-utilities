@@ -192,7 +192,7 @@ ttm.define 'equation_builder',
       delClick: ->
         @logic.command @commands.build_remove_pointed_at()
       piClick: ->
-        @logic.command @commands.build_append_pi()
+        @logic.command @commands.build_append_pi(value: "3.14")
       rparenClick: ->
         @logic.command @commands.build_exit_sub_expression()
       lparenClick: ->
