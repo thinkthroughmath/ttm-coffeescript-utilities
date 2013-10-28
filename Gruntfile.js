@@ -48,14 +48,6 @@ module.exports = function (grunt) {
       }
     },
 
-    sass: {
-      dist: {
-        files: {
-          '<%= yeoman.out %>/ttm-coffeescript-utilities.css': 'src/stylesheets/browser.scss'
-        }
-      }
-    },
-
     concat: {
       options: {
         banner: '<%= banner %>',
@@ -187,7 +179,6 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-contrib-jasmine');
   grunt.loadNpmTasks('grunt-browserify');
-  grunt.loadNpmTasks('grunt-sass');
   grunt.loadNpmTasks('grunt-contrib-uglify');
 
   grunt.registerTask('watch-serve', [
@@ -198,14 +189,12 @@ module.exports = function (grunt) {
   grunt.registerTask('build', [
     'clean',
     'coffee',
-    'sass',
     'concat',
     'copy:out',
     'copy:spec',
     'browserify',
     'copy:styles',
     'uglify',
-    'cssmin'
   ]);
 
 

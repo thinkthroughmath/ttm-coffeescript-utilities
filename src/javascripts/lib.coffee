@@ -10,9 +10,6 @@ require './lib/logger'
 require './lib/polyfill'
 
 
-
-
-
 ttm.defaults = (provided, defaults)->
   _.extend({}, defaults, provided)
 
