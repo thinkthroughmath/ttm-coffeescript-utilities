@@ -26,14 +26,14 @@ removing any lint references for now
 
 Download the [production version][min] or the [development version][max].
 
-[min]: https://raw.github.com/thinkthroughmath/jquery-ttm-coffeescript-utilties/master/dist/jquery.ttm-coffeescript-utilties.min.js
-[max]: https://raw.github.com/thinkthroughmath/jquery-ttm-coffeescript-utilties/master/dist/jquery.ttm-coffeescript-utilties.js
+[min]: https://raw.github.com/thinkthroughmath/jquery-ttm-coffeescript-utilities/master/dist/jquery.ttm-coffeescript-utilities.min.js
+[max]: https://raw.github.com/thinkthroughmath/jquery-ttm-coffeescript-utilities/master/dist/jquery.ttm-coffeescript-utilities.js
 
 In your web page:
 
 ```html
 <script src="jquery.js"></script>
-<script src="dist/ttm-coffeescript-utilties.min.js"></script>
+<script src="dist/ttm-coffeescript-utilities.min.js"></script>
 <script>
 jQuery(function($) {
   $.awesome(); // "awesome"
