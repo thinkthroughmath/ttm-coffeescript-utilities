@@ -95,10 +95,6 @@ ttm.class_mixer RefinementByType
 ttm.lib.object_refinement = Refinement
 
 
-
-require './lib/math'
-
-
 _.mixin {
   compactObject: (o) ->
     _.each o, (v, k) ->
