@@ -34,9 +34,9 @@ module.exports = function (grunt) {
     coffee: {
       lib: {
         expand: true,
-        cwd: '<%= yeoman.src %>/javascripts/',
+        cwd: '<%= yeoman.src %>/',
         src: ['**/*.coffee'],
-        dest: '<%= yeoman.out %>/javascripts/',
+        dest: '<%= yeoman.out %>/src/',
         ext: '.js'
       },
       test: {
@@ -69,31 +69,9 @@ module.exports = function (grunt) {
           expand: true,
           dot: true,
           cwd: '<%= yeoman.src %>',
-          dest: '<%= yeoman.out %>',
+          dest: '<%= yeoman.out %>/src',
           src: [
             '**/*.js',
-          ]
-        }]
-      },
-      spec: {
-        files: [{
-          expand: true,
-          dot: true,
-          cwd: '<%= yeoman.test %>',
-          dest: '<%= yeoman.out %>/spec/',
-          src: [
-            '**/*.js',
-          ]
-        }]
-      },
-      styles: {
-        files: [{
-          expand: true,
-          dot: true,
-          cwd: '<%= yeoman.out %>',
-          dest: '<%= yeoman.dist %>',
-          src: [
-            '**/*.css',
           ]
         }]
       }
@@ -101,34 +79,27 @@ module.exports = function (grunt) {
 
     browserify: {
       dist: {
-        src: '<%= yeoman.out %>/javascripts/browser.js',
+        src: '<%= yeoman.out %>/src/browser.js',
         dest: '<%= yeoman.dist %>/<%= pkg.name %>.js'
       }
     },
     clean: {
-      options: {
-        // "no-write": true
-      },
       all: {
         files: [{
           dot: true,
           src: [
             '<%= yeoman.out %>',
-            '<%= yeoman.dist %>'
+            '<%= yeoman.dist %>',
           ]
         }]
       }
     },
     jasmine: {
       specs: [
-        '<%= yeoman.bower %>/jquery/jquery.js',
         '<%= yeoman.bower %>/underscore/underscore.js',
-        '<%= yeoman.out %>/spec/support/jasmine-jquery.js',
         '<%= yeoman.dist %>/<%= pkg.name %>.js',
-        '<%= yeoman.out %>/spec/support/spec_helpers.js',
         '<%= yeoman.out %>/spec/lib_spec.js',
         '<%= yeoman.out %>/spec/lib/**/*.js',
-        '<%= yeoman.out %>/spec/math/**/*.js',
       ]
     },
     connect: {
@@ -152,7 +123,7 @@ module.exports = function (grunt) {
     watch: {
       coffee: {
         files: [
-          '<%= yeoman.src %>/**/*.{coffee,scss}',
+          '<%= yeoman.src %>/**/*.coffee',
           '<%= yeoman.test %>/**/*.coffee',
         ],
         tasks: ['build'],
@@ -191,9 +162,7 @@ module.exports = function (grunt) {
     'coffee',
     'concat',
     'copy:out',
-    'copy:spec',
     'browserify',
-    'copy:styles',
     'uglify',
   ]);
 
