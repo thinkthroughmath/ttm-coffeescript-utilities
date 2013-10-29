@@ -1,25 +1,8 @@
 
 # TTM Coffeescript Utilities
 
-Coffeescript helpers developed internally at TTM
-
-... and for now, the claculator and the equation builder. want to pull
-that out asap.
-
-
-plan
-
-start gruntfile
-
-currently for utils
-just need
- - coffee
- - test
- - watch
- - build
-
-
-removing any lint references for now
+Coffeescript helpers developed internally at TTM. The specifics of
+each component are included below.
 
 
 ## Getting Started
@@ -32,20 +15,25 @@ Download the [production version][min] or the [development version][max].
 In your web page:
 
 ```html
-<script src="jquery.js"></script>
-<script src="dist/ttm-coffeescript-utilities.min.js"></script>
+<script src="path/to/ttm-coffeescript-utilities.min.js"></script>
 <script>
-jQuery(function($) {
-  $.awesome(); // "awesome"
-});
+    // use anything provided by the library, such as the
+    // class mixer
+    function MyClass(){  }
+    thinkthroughmath.class_mixer(MyClass)
 </script>
 ```
 
-## Documentation
-_(Coming soon)_
+In node, loading the library will attach things to the `global`
+object instead of `window`. You can still just reference the library
+through `thinkthroughmath`, though.
 
-## Examples
-_(Coming soon)_
+
+## Documentation
+TODO document class_mixer, refinements, and logger
+
 
 ## Release History
-_(Nothing yet)_
+
+10/29/13 - Initial release
+
